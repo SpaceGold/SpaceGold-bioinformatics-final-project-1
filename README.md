@@ -10,16 +10,16 @@ This project is a demo of a generalizable analysis pipeline of SRA and tabular g
 #### Analysis
 Examples
 * Inspect 70+ Whole Genome Sequences (WGS) from Brazilian Amazon
-*  Compare for mutations
-*  [Describe mutations over time](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA662684)
+ * Compare for mutations
+ * [Describe mutations over time](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA662684)
 * Inspect infection and herd immunity data
-*  [Compare Manaus and São Paulo](https://www.medrxiv.org/content/10.1101/2020.09.16.20194787v1.full.pdf)
-*  Prevalence of SARS-CoV-2 antibodies
-*  Infection fatality ratio
+ * [Compare Manaus and São Paulo](https://www.medrxiv.org/content/10.1101/2020.09.16.20194787v1.full.pdf)
+ * Prevalence of SARS-CoV-2 antibodies
+ * Infection fatality ratio
 * Summarize Manaous status
-*  Risk factors
-*  Herd immunity
-*  Upshot
+ * Risk factors
+ * Herd immunity
+ * Upshot
 
 #### Other
 
