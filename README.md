@@ -5,7 +5,7 @@ November 2020
 
 #### Overview
 There has been conflicting information about herd immunity out of the Manaous, Amazonas, Brazil.
-This project is a demo of a generalizable analysis pipeline of SRA and tabular geographical data.
+This project is a demo of a generalizable analysis pipeline of Sequence Read Archive (SRA) and tabular geographical data.
 
 #### Analysis
 Examples
