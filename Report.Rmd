@@ -1,14 +1,14 @@
 ---
-title: 'Your Title Here'
-author: "Don Francisco"
-date: "November 1, 2020"
+title: 'The Brazillian Amazon & COVID-19'
+author: "Adam Zimmerman"
+date: "December 1, 2020"
 output: pdf_document
 csl: bioinformatics.csl
 bibliography: references.bib
 params:
   gff_file_path: "/data/sars_vcf_analysis/02_genome_reference/sars_refgenome_annotation.gff"
   vcf_dir_path: "data/11_vcf_output_for_R"
-  sra_runtable_path: "data/00_sra_runtable/SraRunTable_PRJNA656695_short_example"
+  sra_runtable_path: "data/00_sra_runtable/SraRunTable_PRJNA662684.txt"
 ---
 
 ```{r setup, include = FALSE}
