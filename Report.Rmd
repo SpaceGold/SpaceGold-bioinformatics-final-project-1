@@ -44,6 +44,10 @@ library("dplyr")
 library("ggthemes")
 library("medrxivr")
 library("oxcovid19")
+
+# this loads all function files in the code/functions directory
+function_paths <- list.files("code/functions", full.names = TRUE)
+purrr::walk(function_paths, source)
 ```
 
 ```{r load-vcf-data}
@@ -66,8 +70,8 @@ vcf_with_metadata <- add_genes_metadata_to_vcfstack(
   cleaned_genes_table = gene_table)
 ```
 
-```{r load-oxcovid19-data}
-# OxCOVID19 setup
+```{r load-confirmed-data}
+# OxCOVID19 confirmed cases setup
 # this loads all function files in the code/functions directory
 function_paths <- list.files("code/functions", full.names = TRUE)
 purrr::walk(function_paths, source)
@@ -80,7 +84,7 @@ epi_tab <- get_table(con = con, tbl_name = "epidemiology")
 
 ## Step 3: Query the epidemiology table to show data for Brazil
 bra_epi_tab <- dplyr::filter(.data = epi_tab, countrycode == "BRA", adm_area_1 
-                             == "Amazonas")
+                             %in% c("Amazonas", "São Paulo", "Sao Paulo"))
 ```
 
 # Figures
@@ -105,27 +109,51 @@ vcf_with_metadata %>%
 
 ```{r confirmed-plot}
 # produce a dual line plot of confirmed cases by state, Amazonas or Sao Paulo
-ox-plot <- bra_epi_tab %>%
+confirmed_plot <- bra_epi_tab %>%
   group_by(date) %>%
   ggplot(aes(x = date,
              y = confirmed)) +
-  geom_line() +
+  geom_line(aes(colour=adm_area_1)) +
   labs(title = "Confirmed COVID-19 cases over time",
        x = "Date",
        y = "Confirmed Cases")
 
-# TODO: Adam could use help in how to setup two cities to compare in one or two plots 
-ggsave(plot = confirmed-plot,
-       filename = "output/figures/confirmed.png ")
+ggsave(plot = confirmed_plot,
+       filename = "output/figures/confirmed.png")
+
+# split into facet grid, or just color by state(yes)
+
+confirmed_plot
 ```
 
-**Figure 2: Manaus saw more severe confirmed cases of COVID-19 than Sao Paulo.
+**Figure 2**: The state of Sao Paulo saw more total Confirmed cases than the state of Amazonas.
+
+```{r confirmed-plot}
+# produce a dual line plot of confirmed cases by state, Amazonas or Sao Paulo
+confirmed_plot <- bra_epi_tab %>%
+  group_by(date) %>%
+  ggplot(aes(x = date,
+             y = confirmed)) +
+  geom_line(aes(colour=adm_area_1)) +
+  labs(title = "Confirmed COVID-19 cases over time",
+       x = "Date",
+       y = "Confirmed Cases")
+
+ggsave(plot = confirmed_plot,
+       filename = "output/figures/confirmed.png")
+
+# split into facet grid, or just color by state(yes)
+
+confirmed_plot
+```
+
+**Figure**: Amazonas saw greater confirmed cases per capita than Sao Paulo.
 
 ```{r prevalence-plot}
 # produce a dual-line plot of seroreversion adjusted prevalence of SARS-CoV-2
 # antibodies across Manaus and Sao Paulo
-prevalence_path: "data/raw_data/Seroreversion_adjusted_prevalence.csv"
-prevalence-plot <- prevalence_path %>%
+prevalence_path <- readr::read_csv("data/raw_data/Seroreversion_adjusted_prevalence.csv")
+prevalence_plot <- prevalence_path %>%
   group_by(Month) %>%
   ggplot(aes(x = Month,
              y = Manaus_prevalence)) +
@@ -135,11 +163,13 @@ prevalence-plot <- prevalence_path %>%
        x = "Month",
        y = "Manaus seroreversion adjusted prevalence")
 
-ggsave(plot = prevalence-plot,
+ggsave(plot = prevalence_plot,
        filename = "output/figures/prevalence_plot.png")
+
+prevalence_plot
 ```
 
-**Figure 3: Manaus saw more antibody prevalence of SARS-CoV-2 than Sao Paulo.
+**Figure 3**: Manaus saw more antibody prevalence of SARS-CoV-2 than Sao Paulo.
 
 # Tables
 
