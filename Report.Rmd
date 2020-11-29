@@ -9,6 +9,7 @@ params:
   gff_file_path: "/data/sars_vcf_analysis/02_genome_reference/sars_refgenome_annotation.gff"
   vcf_dir_path: "data/11_vcf_output_for_R"
   sra_runtable_path: "data/00_sra_runtable/SraRunTable_PRJNA662684.txt"
+  prevalence_path: "data/raw_data/Seroreversion_adjusted_prevalence.csv"
 ---
 
 ```{r setup, include = FALSE}
@@ -20,7 +21,7 @@ knitr::opts_chunk$set(echo = FALSE,
 
 # Background and Overview
 
-This is a report on SARS-CoV-2, including some variant analysis [@Buss2020.09.16.20194787].
+This is a report on SARS-CoV-2 genetic data, as well as some COVID-19 prevalence data for Manaus and Sao Paulo. [@Buss2020.09.16.20194787].
 
 # Methods
 
@@ -45,10 +46,8 @@ library("vcfR")
 library("ggplot2")
 library("dplyr")
 library("ggthemes")
-
-# this loads all function files in the code/functions directory
-function_paths <- list.files("code/functions", full.names = TRUE)
-purrr::walk(function_paths, source)
+library("medrxivr")
+library("oxcovid19")
 ```
 
 ```{r load-vcf-data}
@@ -71,6 +70,22 @@ vcf_with_metadata <- add_genes_metadata_to_vcfstack(
   cleaned_genes_table = gene_table)
 ```
 
+```{r load-oxcovid19-data}
+# OxCOVID19 setup
+# this loads all function files in the code/functions directory
+function_paths <- list.files("code/functions", full.names = TRUE)
+purrr::walk(function_paths, source)
+
+## Step 1: Create a connection to OxCOVID19 PostgreSQL server
+con <- connect_oxcovid19()
+
+## Step 2: Access epidemiology table from OxCOVID19 PostgreSQL server
+epi_tab <- get_table(con = con, tbl_name = "epidemiology")
+
+## Step 3: Query the epidemiology table to show data for Brazil
+bra_epi_tab <- dplyr::filter(.data = epi_tab, countrycode == "BRA", adm_area_1 == "Amazonas")
+```
+
 # Figures
 
 ```{r sample-plot}
@@ -90,6 +105,45 @@ vcf_with_metadata %>%
 ```
 
 **Figure 1**: N and S genes have more unique SNPs in the set of samples analyzed.
+
+```{r confirmed-plot}
+# produce a line plot of confirmed by state, Amazonas or Sao Paulo, over time
+ox-plot <- bra_epi_tab %>%
+  group_by(date) %>%
+  ggplot(aes(x = date,
+             y = confirmed)) +
+  geom_line() +
+  labs(title = "Confirmed COVID-19 cases over time",
+       x = "Date",
+       y = "Confirmed Cases")
+
+# TODO: Adam could use help in how to setup two cities to compare in one or two plots 
+ggsave(plot = confirmed-plot,
+       filename = "output/figures/confirmed.png ")
+```
+
+**Figure 2: Manaus saw more severe confirmed cases of COVID-19 than Sao Paulo.
+
+```{r prevalence-plot}
+# produce a line plot of seroreversion adjusted prevalence of SARS-CoV-2
+# antibodies across Manaus and Sao Paulo
+prevalence-plot <- prevalence_path %>%
+  group_by(Month) %>%
+  ggplot(aes(x = Month,
+             y = prevalence)) +
+  geom_line() +
+  labs(title = "Seroreversion adjusted prevalence of SARS-CoV-2 antibodies
+                     across Manaus and Sao Paulo",
+       x = "Month",
+       y = "Antibody prevalence")
+
+ggsave(plot = prevalence-plot,
+       filename = "output/figures/prevalence_plot.png")
+
+prevalence-plot
+```
+
+**Figure 3: Manaus saw more antibody prevalence of SARS-CoV-2 than Sao Paulo.
 
 # Tables
 
