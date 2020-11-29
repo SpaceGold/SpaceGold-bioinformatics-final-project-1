@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = FALSE,
 
 # Background and Overview
 
-This is a report on SARS-CoV-2, including some variant analysis [@koyama2020variant].
+This is a report on SARS-CoV-2, including some variant analysis [@Buss2020.09.16.20194787].
 
 # Methods
 
