@@ -84,31 +84,14 @@ epi_tab <- get_table(con = con, tbl_name = "epidemiology")
 
 ## Step 3: Query the epidemiology table to show data for Brazil
 bra_epi_tab <- dplyr::filter(.data = epi_tab, countrycode == "BRA", adm_area_1 
-                             %in% c("Amazonas", "São Paulo", "Sao Paulo"))
+                             %in% c("Amazonas", "São Paulo"))
+# readr::write_csv(bra_epi_tab, "./output/confirmed.csv")
 ```
 
 # Figures
 
-```{r sample-plot}
-# create a plot of unique SNP locations within each gene across all samples
-vcf_with_metadata %>%
-  filter(!is.na(gene)) %>% # get rid of SNPs not in gene regions
-  group_by(gene, pos) %>%
-  tally() %>% # this gives a column n for the number of gene by position
-  group_by(gene) %>%
-  tally() %>% # this collapses that down to the number of unique SNP locations
-  ggplot(aes(x = gene,
-             y = n)) +
-    geom_col() +
-    labs(title = "Count of distinct SNPs in Named SARS-CoV-2 Genes",
-         x = "Gene Name") +
-  theme_few() # get rid of the grey background
-```
-
-**Figure 1**: N and S genes have more unique SNPs in the set of samples analyzed.
-
 ```{r confirmed-plot}
-# produce a dual line plot of confirmed cases by state, Amazonas or Sao Paulo
+# produce a colored line plot of confirmed cases by state
 confirmed_plot <- bra_epi_tab %>%
   group_by(date) %>%
   ggplot(aes(x = date,
@@ -121,30 +104,59 @@ confirmed_plot <- bra_epi_tab %>%
 ggsave(plot = confirmed_plot,
        filename = "output/figures/confirmed.png")
 
-# split into facet grid, or just color by state(yes)
-
 confirmed_plot
 ```
 
-**Figure 2**: The state of Sao Paulo saw more total Confirmed cases than the state of Amazonas.
+**Figure **: The state of Sao Paulo saw more total confirmed cases than the state of Amazonas.
 
-```{r confirmed-plot}
-# produce a dual line plot of confirmed cases by state, Amazonas or Sao Paulo
-confirmed_plot <- bra_epi_tab %>%
+```{r population-plot}
+# produce a pie chart highlighting Sao Paulo and Amazonas vs Total
+population_path <- readr::read_csv("data/raw_data/Brazil_populations.csv")
+population_plot <- population_path %>%
+  group_by(population) %>%
+  dplyr::filter(RegionName %in% c("Amazonas", "São Paulo", "Total"))
+
+# Remove Amazonas and Sao Paulo populations from Total
+population_plot[3,3] <- (population_plot[3,3] - population_plot[2,3] - population_plot[1,3])
+
+# Basic piechart
+ggplot(population_plot, aes(x="", y=population, fill=RegionName)) +
+  geom_bar(stat="identity", width=1, color="white") +
+  coord_polar("y", start=0) +
+  labs(title = "Populations of Brazil") +
+  theme_void() # remove background, grid, numeric labels
+
+# TODO: Adam fix ggsave; broken 2020-11-29
+# ggsave("output/figures/population_plot.png", population_plot, device = "png")
+
+population_plot
+```
+
+**Figure**: Sao Paulo is much larger than Amazonas by population.
+
+```{r per-capita-plot}
+# produce a dual line plot of confirmed cases by state, Amazonas or Sao Paul
+per_capita_amazonas <- bra_epi_tab %>%
+  dplyr::filter(adm_area_1 == "Amazonas") %>%
   group_by(date) %>%
-  ggplot(aes(x = date,
-             y = confirmed)) +
-  geom_line(aes(colour=adm_area_1)) +
-  labs(title = "Confirmed COVID-19 cases over time",
+  dplyr::mutate(per_capita = confirmed/4207714) %>%
+  dplyr::select(date, per_capita)
+
+per_capita_sp <- bra_epi_tab %>%
+  dplyr::filter(adm_area_1 == "São Paulo") %>%
+  group_by(date) %>%
+  dplyr::mutate(per_capita = confirmed/46289333) %>%
+  dplyr::select(date, per_capita)
+
+# per_capita_amazonas
+# per_capita_sp
+per_capita_plot <- ggplot() +
+  geom_line(data=per_capita_amazonas, aes(x = date, y = per_capita))
+  geom_line(data=per_capita_sp, aes(x = date, y = per_capita))
+  labs(title = "Confirmed COVID-19 cases per capita over time",
        x = "Date",
        y = "Confirmed Cases")
-
-ggsave(plot = confirmed_plot,
-       filename = "output/figures/confirmed.png")
-
-# split into facet grid, or just color by state(yes)
-
-confirmed_plot
+per_capita_plot
 ```
 
 **Figure**: Amazonas saw greater confirmed cases per capita than Sao Paulo.
@@ -169,7 +181,25 @@ ggsave(plot = prevalence_plot,
 prevalence_plot
 ```
 
-**Figure 3**: Manaus saw more antibody prevalence of SARS-CoV-2 than Sao Paulo.
+**Figure**: Manaus saw more antibody prevalence of SARS-CoV-2 than Sao Paulo.
+
+```{r sample-plot}
+# create a plot of unique SNP locations within each gene across all samples
+vcf_with_metadata %>%
+  filter(!is.na(gene)) %>% # get rid of SNPs not in gene regions
+  group_by(gene, pos) %>%
+  tally() %>% # this gives a column n for the number of gene by position
+  group_by(gene) %>%
+  tally() %>% # this collapses that down to the number of unique SNP locations
+  ggplot(aes(x = gene,
+             y = n)) +
+    geom_col() +
+    labs(title = "Count of distinct SNPs in Named SARS-CoV-2 Genes",
+         x = "Gene Name") +
+  theme_few() # get rid of the grey background
+```
+
+**Figure**: N and S genes have more unique SNPs in the set of samples analyzed.
 
 # Tables
 
