@@ -139,23 +139,23 @@ population_plot
 per_capita_amazonas <- bra_epi_tab %>%
   dplyr::filter(adm_area_1 == "Amazonas") %>%
   group_by(date) %>%
-  dplyr::mutate(per_capita = confirmed/4207714) %>%
-  dplyr::select(date, per_capita)
+  dplyr::mutate(per_capita_a = confirmed/4207714) %>%
+  dplyr::select(date, per_capita_a)
 
 per_capita_sp <- bra_epi_tab %>%
   dplyr::filter(adm_area_1 == "São Paulo") %>%
   group_by(date) %>%
-  dplyr::mutate(per_capita = confirmed/46289333) %>%
-  dplyr::select(date, per_capita)
+  dplyr::mutate(per_capita_s = confirmed/46289333) %>%
+  dplyr::select(date, per_capita_s)
 
 # per_capita_amazonas
 # per_capita_sp
 per_capita_plot <- ggplot() +
-  geom_line(data=per_capita_amazonas, aes(x = date, y = per_capita))
-  geom_line(data=per_capita_sp, aes(x = date, y = per_capita))
+  geom_line(data=per_capita_amazonas, aes(x = date, y = per_capita_a)) +
+  geom_line(data=per_capita_sp, aes(x = date, y = per_capita_s))
   labs(title = "Confirmed COVID-19 cases per capita over time",
        x = "Date",
-       y = "Confirmed Cases")
+       y = "Confirmed Cases Per Capita")
 per_capita_plot
 ```
 
