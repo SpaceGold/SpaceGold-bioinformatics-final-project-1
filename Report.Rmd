@@ -182,8 +182,9 @@ prevalence_plot <- prevalence_data %>%
   labs(title = "Prevalence of SARS-CoV-2 antibodies across Manaus and São Paulo
        (seroreversion adjusted)",
        x = "Month",
-       y = "Antibody prevalence (% of population)") #+
-       # labs(fill = "State")
+       y = "Antibody prevalence (% of population)") +
+       # TODO: ADAM FIX LEGEND
+  # theme(legend.title = "State", legend.) +
 
   theme_clean()
 
@@ -212,6 +213,23 @@ vcf_with_metadata %>%
 ```
 
 **Figure**: N and S genes have more unique SNPs in the set of samples analyzed.
+
+```{r-mortality-plot}
+# create a bar chart of mortality in Manaus, March - June
+mortality_data <- readr::read_csv("data/raw_data/Excess_mortality.csv") %>%
+  tidyr::pivot_longer(!age, names_to="mortality")
+  
+mortality_plot <- ggplot(mortality_data, aes(x = age, y = mortality)) +
+  geom_col() +
+  labs(title = "Excess mortality in Manaus by age and gender",
+         x = "Age", y = "Deaths") +
+  theme_clean()
+
+mortality_plot
+
+```
+
+**Figure**: Excess mortality, the number of atypical deaths, was highest in Manaus males and older patients, March 2020 through June 2020.
 
 # Tables
 
