@@ -41,6 +41,8 @@ This is a report on SARS-CoV-2 genetic data, as well as some COVID-19 prevalence
 library("vcfR")
 library("ggplot2")
 library("dplyr")
+library("tidyr")
+library("readr")
 library("ggthemes")
 library("medrxivr")
 library("oxcovid19")
@@ -103,10 +105,10 @@ confirmed_plot <- bra_epi_tab %>%
        y = "Confirmed Cases") +
   theme_clean()
 
-ggsave(plot = confirmed_plot,
-       filename = "output/figures/confirmed.png")
-
 confirmed_plot
+
+ggsave(plot = confirmed_plot,
+       filename = "output/figures/confirmed_plot.png")
 ```
 
 **Figure **: The state of São Paulo saw more total confirmed cases than the state of Amazonas.
@@ -125,11 +127,8 @@ population_data[3,3] <- (population_data[3,3] - population_data[2,3] - populatio
 population_plot <- ggplot(population_data, aes(x="", y=population, fill=RegionName)) +
   geom_bar(stat="identity", width=1, color="white") +
   coord_polar("y", start=0) +
-  labs(title = "Populations of Brazil") +
+  labs(title = "Population of Brazil") +
   theme_void() # remove background, grid, numeric labels
-
-# TODO: Adam fix ggsave; broken 2020-11-29
-# ggsave("output/figures/population_plot.png", population_plot, device = "png")
 
 population_plot
 
@@ -137,10 +136,10 @@ ggsave(plot = population_plot,
        filename = "output/figures/population_plot.png")
 ```
 
-**Figure**: Sao Paulo is much larger than Amazonas by population.
+**Figure**: The state of São Paulo is much larger than Amazonas by population at 46 million versus 4 million.
 
 ```{r per-capita-plot}
-# produce a dual line plot of confirmed cases by state, Amazonas or Sao Paul
+# produce a dual line plot of confirmed cases by state, Amazonas or São Paulo
 per_capita_amazonas <- bra_epi_tab %>%
   dplyr::filter(adm_area_1 == "Amazonas") %>%
   group_by(date) %>%
@@ -162,7 +161,11 @@ per_capita_plot <- ggplot() +
        x = "Date",
        y = "Confirmed Cases Per Capita") +
   theme_clean()
+
 per_capita_plot
+
+ggsave(per_capita_plot,
+       filename = "output/figures/per_capita_plot.png")
 ```
 
 **Figure**: Amazonas saw greater confirmed cases per capita than São Paulo.
@@ -170,13 +173,18 @@ per_capita_plot
 ```{r prevalence-plot}
 # produce a dual-line plot of seroreversion adjusted prevalence of SARS-CoV-2
 # antibodies across Manaus and Sao Paulo
-prevalence_path <- readr::read_csv("data/raw_data/Seroreversion_adjusted_prevalence.csv")
-prevalence_plot <- prevalence_path %>%
-  
-  labs(title = "Seroreversion adjusted prevalence of SARS-CoV-2 antibodies
-                     across Manaus and São Paulo",
+prevalence_data <- readr::read_csv("data/raw_data/Adjusted_prevalence.csv") %>%
+  # lubridate::month(date) %>%
+  tidyr::pivot_longer(!date, names_to="region")
+prevalence_plot <- prevalence_data %>%
+  ggplot() +
+  geom_line(aes(x = date, y = value, color = region)) +
+  labs(title = "Prevalence of SARS-CoV-2 antibodies across Manaus and São Paulo
+       (seroreversion adjusted)",
        x = "Month",
-       y = "Antibody prevalence") +
+       y = "Antibody prevalence (% of population)") #+
+       # labs(fill = "State")
+
   theme_clean()
 
 ggsave(plot = prevalence_plot,
@@ -200,7 +208,7 @@ vcf_with_metadata %>%
     geom_col() +
     labs(title = "Count of distinct SNPs in Named SARS-CoV-2 Genes",
          x = "Gene Name") +
-  theme_few() # get rid of the grey background
+  theme_clean() # get rid of the grey background
 ```
 
 **Figure**: N and S genes have more unique SNPs in the set of samples analyzed.
