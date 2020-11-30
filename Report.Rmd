@@ -44,6 +44,7 @@ library("dplyr")
 library("ggthemes")
 library("medrxivr")
 library("oxcovid19")
+library("lubridate")
 
 # this loads all function files in the code/functions directory
 function_paths <- list.files("code/functions", full.names = TRUE)
@@ -99,7 +100,8 @@ confirmed_plot <- bra_epi_tab %>%
   geom_line(aes(colour=adm_area_1)) +
   labs(title = "Confirmed COVID-19 cases over time",
        x = "Date",
-       y = "Confirmed Cases")
+       y = "Confirmed Cases") +
+  theme_clean()
 
 ggsave(plot = confirmed_plot,
        filename = "output/figures/confirmed.png")
@@ -112,15 +114,15 @@ confirmed_plot
 ```{r population-plot}
 # produce a pie chart highlighting Sao Paulo and Amazonas vs Total
 population_path <- readr::read_csv("data/raw_data/Brazil_populations.csv")
-population_plot <- population_path %>%
+population_data <- population_path %>%
   group_by(population) %>%
   dplyr::filter(RegionName %in% c("Amazonas", "São Paulo", "Total"))
 
 # Remove Amazonas and Sao Paulo populations from Total
-population_plot[3,3] <- (population_plot[3,3] - population_plot[2,3] - population_plot[1,3])
+population_data[3,3] <- (population_data[3,3] - population_data[2,3] - population_data[1,3])
 
 # Basic piechart
-ggplot(population_plot, aes(x="", y=population, fill=RegionName)) +
+population_plot <- ggplot(population_data, aes(x="", y=population, fill=RegionName)) +
   geom_bar(stat="identity", width=1, color="white") +
   coord_polar("y", start=0) +
   labs(title = "Populations of Brazil") +
@@ -130,6 +132,9 @@ ggplot(population_plot, aes(x="", y=population, fill=RegionName)) +
 # ggsave("output/figures/population_plot.png", population_plot, device = "png")
 
 population_plot
+
+ggsave(plot = population_plot,
+       filename = "output/figures/population_plot.png")
 ```
 
 **Figure**: Sao Paulo is much larger than Amazonas by population.
@@ -167,14 +172,12 @@ per_capita_plot
 # antibodies across Manaus and Sao Paulo
 prevalence_path <- readr::read_csv("data/raw_data/Seroreversion_adjusted_prevalence.csv")
 prevalence_plot <- prevalence_path %>%
-  group_by(Month) %>%
-  ggplot(aes(x = Month,
-             y = Manaus_prevalence)) +
-  geom_line() +
+  
   labs(title = "Seroreversion adjusted prevalence of SARS-CoV-2 antibodies
-                     across Manaus and Sao Paulo",
+                     across Manaus and São Paulo",
        x = "Month",
-       y = "Manaus seroreversion adjusted prevalence")
+       y = "Antibody prevalence") +
+  theme_clean()
 
 ggsave(plot = prevalence_plot,
        filename = "output/figures/prevalence_plot.png")
@@ -182,7 +185,7 @@ ggsave(plot = prevalence_plot,
 prevalence_plot
 ```
 
-**Figure**: Manaus saw more antibody prevalence of SARS-CoV-2 than Sao Paulo.
+**Figure**: Manaus saw more widespread prevalence of SARS-CoV-2 antibodies vs. São Paulo, up to 66% vs. 22% of the population respectively.
 
 ```{r sample-plot}
 # create a plot of unique SNP locations within each gene across all samples
