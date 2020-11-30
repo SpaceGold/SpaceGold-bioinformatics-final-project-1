@@ -107,7 +107,7 @@ ggsave(plot = confirmed_plot,
 confirmed_plot
 ```
 
-**Figure **: The state of Sao Paulo saw more total confirmed cases than the state of Amazonas.
+**Figure **: The state of São Paulo saw more total confirmed cases than the state of Amazonas.
 
 ```{r population-plot}
 # produce a pie chart highlighting Sao Paulo and Amazonas vs Total
@@ -151,15 +151,16 @@ per_capita_sp <- bra_epi_tab %>%
 # per_capita_amazonas
 # per_capita_sp
 per_capita_plot <- ggplot() +
-  geom_line(data=per_capita_amazonas, aes(x = date, y = per_capita_a)) +
-  geom_line(data=per_capita_sp, aes(x = date, y = per_capita_s))
+  geom_line(data=per_capita_amazonas, aes(x = date, y = per_capita_a, color = "Amazonas")) +
+  geom_line(data=per_capita_sp, aes(x = date, y = per_capita_s, color = "São Paulo")) +
   labs(title = "Confirmed COVID-19 cases per capita over time",
        x = "Date",
-       y = "Confirmed Cases Per Capita")
+       y = "Confirmed Cases Per Capita") +
+  theme_clean()
 per_capita_plot
 ```
 
-**Figure**: Amazonas saw greater confirmed cases per capita than Sao Paulo.
+**Figure**: Amazonas saw greater confirmed cases per capita than São Paulo.
 
 ```{r prevalence-plot}
 # produce a dual-line plot of seroreversion adjusted prevalence of SARS-CoV-2
