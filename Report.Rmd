@@ -159,7 +159,8 @@ per_capita_plot <- ggplot() +
   geom_line(data=per_capita_sp, aes(x = date, y = per_capita_s, color = "São Paulo")) +
   labs(title = "Confirmed COVID-19 cases per capita over time",
        x = "Date",
-       y = "Confirmed Cases Per Capita") +
+       y = "Confirmed Cases Per Capita",
+       color = "State") +
   theme_clean()
 
 per_capita_plot
@@ -183,8 +184,9 @@ prevalence_plot <- prevalence_data %>%
        (seroreversion adjusted)",
        x = "Month",
        y = "Antibody prevalence (% of population)") +
-       # TODO: ADAM FIX LEGEND
-  # theme(legend.title = "State", legend.) +
+  scale_color_manual("City",
+                     labels = c("Manaus", "Sao Paulo"),
+                     values = c("cyan", "red")) +
 
   theme_clean()
 
@@ -193,6 +195,7 @@ ggsave(plot = prevalence_plot,
 
 prevalence_plot
 ```
+
 
 **Figure**: Manaus saw more widespread prevalence of SARS-CoV-2 antibodies vs. São Paulo, up to 66% vs. 22% of the population respectively.
 
@@ -214,22 +217,27 @@ vcf_with_metadata %>%
 
 **Figure**: N and S genes have more unique SNPs in the set of samples analyzed.
 
-```{r-mortality-plot}
+```{r mortality-plot}
 # create a bar chart of mortality in Manaus, March - June
 mortality_data <- readr::read_csv("data/raw_data/Excess_mortality.csv") %>%
   tidyr::pivot_longer(!age, names_to="mortality")
-  
-mortality_plot <- ggplot(mortality_data, aes(x = age, y = mortality)) +
-  geom_col() +
-  labs(title = "Excess mortality in Manaus by age and gender",
-         x = "Age", y = "Deaths") +
+
+mortality_plot <- ggplot(data = mortality_data, aes(x = age, y = value, color = mortality)) +
+  geom_col(aes(color = mortality)) +
+  labs(title = "Mortality in Manaus, March 2020 to June 2020",
+       x = "Age",
+       y = "Mortality") +
+  # scale_color_manual("City",
+  #                    labels = c("Manaus", "Sao Paulo"),
+  #                    values = c("cyan", "red")) +
+
   theme_clean()
 
 mortality_plot
 
 ```
 
-**Figure**: Excess mortality, the number of atypical deaths, was highest in Manaus males and older patients, March 2020 through June 2020.
+**Figure**: Excess mortality, the number of unusual deaths, was highest in Manaus males and older patients, March 2020 through June 2020.
 
 # Tables
 
