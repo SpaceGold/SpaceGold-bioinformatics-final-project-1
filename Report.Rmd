@@ -226,10 +226,14 @@ mortality_plot <- ggplot(data = mortality_data, aes(x = age, y = value, color = 
   geom_col(aes(color = mortality)) +
   labs(title = "Mortality in Manaus, March 2020 to June 2020",
        x = "Age",
-       y = "Mortality") +
-  # scale_color_manual("City",
-  #                    labels = c("Manaus", "Sao Paulo"),
-  #                    values = c("cyan", "red")) +
+       y = "Deaths") +
+  scale_color_manual("Patient mortality classification",
+                     labels = c("Excess mortality female",
+                                "Excess mortality male",
+                                "Expected mortality female",
+                                "Expected mortality male"),
+                     values = c("cyan", "purple", "green",
+                                "darkorchid2")) +
 
   theme_clean()
 
