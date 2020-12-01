@@ -1,5 +1,5 @@
 ---
-title: 'The Brazillian Amazon & COVID-19'
+title: 'Accelerated case rates led to herd immunity in Amazonas during the COVID-19 pandemic'
 author: "Adam Zimmerman"
 date: "December 1, 2020"
 output: pdf_document
@@ -20,11 +20,25 @@ knitr::opts_chunk$set(echo = FALSE,
 
 # Background and Overview
 
-This is a report on SARS-CoV-2 genetic data, as well as some COVID-19 prevalence data for Manaus and Sao Paulo. [@Buss2020.09.16.20194787].
+What happened in the Amazon and São Paulo during COVID-19? 
+
+This exploratory analysis of tabular and genetic data shows that the city of Manaus, and its state, Amazonas, were hit harder per capita than São Paulo during the summer of 2020 \textcolor{red}{TODO: additional citations}. Deaths especially affected adult male patients, and elderly patients. From summer into fall, this intense period of infection correlated with the emergence of an antibody prevalence among Manaus blood donors that was approximately threefold greater than antibody prevalence among São Paulo blood donors [@Buss2020.09.16.20194787]. This is an indication of good news and herd immunity for Manaus, heading into winter.
+
+Additionally, a genetic analysis of 33 SARS-CoV-2 samples showed that \textcolor{red}{TODO: sequencing and bash findings}.
 
 # Methods
 
-## Suggested Sources
+## Tabular data analysis
+
+\textcolor{red}{TODO: tabular parsing walkthrough: trace piping especially. pkg citations; See methods section of https://elifesciences.org/articles/61981
+Describe what I did in prose form
+Data were downloaded from the NCBI SRA archive from project numbers _ on date. Then processed with trimmomatic and run through a bwa variant calling pipeline (CITATION from bwa paper). … That data was then brought into RStudio to analyze in combination
+Include steps of modifying datatables, e.g. age ranges
+}.
+
+## Genetic data analysis
+
+\textcolor{red}{TODO: sequencing and bash walkthrough: trace scripts as sets by format; citations}
 
 * [vcfR package website](https://knausb.github.io/vcfR_documentation/index.html).
 * https://kjhealy.github.io/covdata/
@@ -37,7 +51,18 @@ This is a report on SARS-CoV-2 genetic data, as well as some COVID-19 prevalence
 
 # Results and Discussion
 
-```{r load-packages-and-functions}
+## Tabular data analysis
+
+\textcolor{red}{TODO: tabular parsing; refer to figures; 66% of Manaus blood donors versus 22% of São Paulo blood donors. Captions, good axes, citations
+Fix fill for col}.
+
+## Genetic data analysis
+
+\textcolor{red}{TODO: fastqc screenshot: evidence that it’s reasonable
+Quality, length, WATCH a few weeks ago on fastqc examples with one goofy one
+, citations}.
+
+ ```{r load-packages-and-functions}
 # These functions are also listed in DESCRIPTION for .travis.yml
 library("vcfR")
 library("ggplot2")
@@ -121,7 +146,7 @@ population_data <- population_path %>%
   group_by(population) %>%
   dplyr::filter(RegionName %in% c("Amazonas", "São Paulo", "Total"))
 
-# Remove Amazonas and Sao Paulo populations from Total
+# Remove Amazonas and São Paulo populations from Total
 population_data[3,3] <- (population_data[3,3] - population_data[2,3] - population_data[1,3])
 
 # Basic piechart
@@ -200,11 +225,12 @@ prevalence_plot
 
 **Figure**: Manaus saw more widespread prevalence of SARS-CoV-2 antibodies vs. São Paulo, up to 66% vs. 22% of the population respectively.
 
-```{r sample-plot}
-# create a plot of unique SNP locations within each gene across all samples
+```{r genetic-plot}
+# create a plot of __ SNP locations within each gene across all samples
 vcf_with_metadata %>%
   filter(!is.na(gene)) %>% # get rid of SNPs not in gene regions
-  group_by(gene, pos) %>%
+  # filter(geo_loc_name == ) %>%
+  group_by(gene, geo_loc_name) %>%
   tally() %>% # this gives a column n for the number of gene by position
   group_by(gene) %>%
   tally() %>% # this collapses that down to the number of unique SNP locations
@@ -267,3 +293,17 @@ gene_table %>%
 **Table 1**: Gene names, locations, and lengths in the SARS-CoV-2 genome. Higher SNP counts in the S and N genes may be related to the larger size of these genes.
 
 # Sources Cited
+
+\textcolor{red}{TODO: say scripts provided by Naupaka Zimmerman “and based on an approach from data carpentry CC”  sentence in methods section.
+In template README steps of this were based on data carpentry, include this in methods
+Webpage URLs should be in code, not cited. If complicated.
+“Figured it out based on approach here”
+Packages in bibtex? Diff schools of thought. 
+Objection that it pollutes biblio
+Dr. Z leans toward code side
+Definitely cite oxford19 but not base r packages
+Can use this for wiggle room. Prefers at least a few peer reviewed articles
+Adding bibtex and citing
+Demonstrate skills to use both in Rmd.
+If you want to mention a webpage or article, how formal: peer reviewed yes, r pkg, have citation function that will give it to you; markdown link is ok for webpage; or create BibTex for website}
+
