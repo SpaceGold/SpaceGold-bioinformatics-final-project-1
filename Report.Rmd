@@ -1,5 +1,5 @@
 ---
-title: 'Accelerated case rates led to herd immunity in Amazonas during the COVID-19 pandemic'
+title: 'Accelerated case rates led to herd immunity but also elderly and male mortality in Amazonas, Brazil during the COVID-19 pandemic'
 author: "Adam Zimmerman"
 date: "December 1, 2020"
 output: pdf_document
@@ -22,7 +22,9 @@ knitr::opts_chunk$set(echo = FALSE,
 
 What happened in the Amazon and São Paulo during COVID-19? 
 
-This exploratory analysis of tabular and genetic data shows that the city of Manaus, and its state, Amazonas, were hit harder per capita than São Paulo during the summer of 2020 \textcolor{red}{TODO: additional citations}. Deaths especially affected adult male patients, and elderly patients. From summer into fall, this intense period of infection correlated with the emergence of an antibody prevalence among Manaus blood donors that was approximately threefold greater than antibody prevalence among São Paulo blood donors [@Buss2020.09.16.20194787]. This is an indication of good news and herd immunity for Manaus, heading into winter.
+This exploratory analysis of tabular and genetic data shows that the city of Manaus, and its state, Amazonas, were hit harder per capita than the city and state of São Paulo through the second (Q2) and third quarters (Q3) of 2020 \textcolor{red}{TODO: additional citations}. Deaths were especially high for elderly patients, as well as male patients in Manaus. 
+
+From Q2 into Q3, the intense period of infection correlated with the emergence of an antibody prevalence among Manaus blood donors that was approximately threefold greater than antibody prevalence among São Paulo blood donors [@Buss2020.09.16.20194787]. This is an indication of good news and herd immunity for Manaus, heading into Q4.
 
 Additionally, a genetic analysis of 33 SARS-CoV-2 samples showed that \textcolor{red}{TODO: sequencing and bash findings}.
 
@@ -30,11 +32,11 @@ Additionally, a genetic analysis of 33 SARS-CoV-2 samples showed that \textcolor
 
 ## Tabular data analysis
 
-\textcolor{red}{TODO: tabular parsing walkthrough: trace piping especially. pkg citations; See methods section of https://elifesciences.org/articles/61981
+\textcolor{red}{TODO: tabular parsing walkthrough: trace piping especially.}
+pkg citations; See methods section of https://elifesciences.org/articles/61981
 Describe what I did in prose form
 Data were downloaded from the NCBI SRA archive from project numbers _ on date. Then processed with trimmomatic and run through a bwa variant calling pipeline (CITATION from bwa paper). … That data was then brought into RStudio to analyze in combination
 Include steps of modifying datatables, e.g. age ranges
-}.
 
 ## Genetic data analysis
 
@@ -53,10 +55,11 @@ Include steps of modifying datatables, e.g. age ranges
 
 ## Tabular data analysis
 
-This analysis indicates that living in Manaus, being elderly, and being male were risk factors for COVID-19 in Brazil in the spring and summer of 2020. It surprised me to see that male patients in Manaus were at such markedly higher risk of death than female patients, to the order of \textcolor{red}{TODO: insert ratio}.
+This analysis indicates that living in Manaus, being elderly, and being male were risk factors for Brazillians facing COVID-19 in Q2 and Q3 of 2020. It surprised me to see that male patients in Manaus were at such markedly higher risk of death than female patients, to the order of \textcolor{red}{TODO: insert ratio}.
 
 \textcolor{red}{TODO: tabular parsing; refer to figures; 66% of Manaus blood donors versus 22% of São Paulo blood donors. Captions, good axes, citations
 Fix fill for col}.
+Excess mortality in 50-55 year old male patients reached a maximum of 126 deaths/1000,  times their expected mortality of 99 deaths/1000, as well as 2.49 the excess mortality of female patients of the same age (54.8 deaths/1000).
 
 ## Genetic data analysis
 
@@ -208,8 +211,7 @@ prevalence_data <- readr::read_csv("data/raw_data/Adjusted_prevalence.csv") %>%
 prevalence_plot <- prevalence_data %>%
   ggplot() +
   geom_line(aes(x = date, y = value, color = region)) +
-  labs(title = "Prevalence of SARS-CoV-2 antibodies across Manaus and São Paulo
-       (seroreversion adjusted)",
+  labs(title = "Prevalence of SARS-CoV-2 antibodies (seroreversion adjusted)",
        x = "Month",
        y = "Antibody prevalence (% of population)") +
   scale_color_manual("City",
@@ -256,9 +258,9 @@ mortality_data_f <- readr::read_csv("data/raw_data/Excess_mortality.csv") %>%
 
 mortality_plot_f <- ggplot(data = mortality_data_f, aes(x = age, y = value, color = mortality)) +
   geom_col(aes(color = mortality, fill = mortality)) +
-  labs(title = "Mortality in Manaus, March 2020 to June 2020",
+  labs(title = "Female mortality in Manaus, March 2020 to June 2020",
        x = "Age",
-       y = "Deaths") +
+       y = "Deaths per 1000") +
   # scale_x_discrete(position = "")
   scale_color_manual("Patient mortality classification",
                      labels = c("Excess mortality female",
@@ -288,9 +290,9 @@ mortality_data_m <- readr::read_csv("data/raw_data/Excess_mortality.csv") %>%
 
 mortality_plot_m <- ggplot(data = mortality_data_m, aes(x = age, y = value, color = mortality)) +
   geom_col(aes(color = mortality, fill = mortality)) +
-  labs(title = "Mortality in Manaus, March 2020 to June 2020",
+  labs(title = "Male mortality in Manaus, March 2020 to June 2020",
        x = "Age",
-       y = "Deaths") +
+       y = "Deaths per 1000") +
   # scale_x_discrete(position = "")
   scale_color_manual("Patient mortality classification",
                      labels = c("Excess mortality male",
@@ -308,7 +310,7 @@ ggsave(mortality_plot_m,
 
 ```
 
-**Figure**: Excess mortality in male patients reached a maximum of about 2.5 times the expected mortality in male patients, and 4.5 times that of female patients.
+**Figure**: Excess mortality in male patients reached a maximum of more than double their expected mortality, as well as double the excess mortality of female patients.
 
 # Tables
 
