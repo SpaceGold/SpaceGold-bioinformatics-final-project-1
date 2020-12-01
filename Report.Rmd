@@ -254,9 +254,8 @@ mortality_data <- readr::read_csv("data/raw_data/Excess_mortality.csv") %>%
 #   theme(strip.background = element_blank(), strip.placement = "outside")
 # ggplot(german_credit, aes(x = Age)) + geom_histogram() + facet_wrap(~Sex)
 
-mortality_plot <- ggplot(data = mortality_data, aes(x = age, y = value)) +
-  geom_col() +
-  facet_wrap(vars(mortality))
+mortality_plot <- ggplot(data = mortality_data, aes(x = age, y = value, color = mortality)) +
+  geom_col(aes(color = mortality, fill = mortality)) +
   labs(title = "Mortality in Manaus, March 2020 to June 2020",
        x = "Age",
        y = "Deaths") +
@@ -266,8 +265,9 @@ mortality_plot <- ggplot(data = mortality_data, aes(x = age, y = value)) +
                                 "Excess mortality male",
                                 "Expected mortality female",
                                 "Expected mortality male"),
-                     values = c("cyan", "magenta", "green",
-                                "red")) +
+                     values = c("coral", "darkseagreen4", "cyan3", "darkorchid2")) +
+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
   theme_clean()
 
