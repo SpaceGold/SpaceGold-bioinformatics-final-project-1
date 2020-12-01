@@ -38,6 +38,8 @@ Describe what I did in prose form
 Data were downloaded from the NCBI SRA archive from project numbers _ on date. Then processed with trimmomatic and run through a bwa variant calling pipeline (CITATION from bwa paper). … That data was then brought into RStudio to analyze in combination
 Include steps of modifying datatables, e.g. age ranges
 
+In the final steps of data processing, I temporarily created a column in `Mortality_data.csv` that compared the ratios of mortality figures. I selected the age range 55-60 to show the maximum ratio seen between male and female excess mortality in Manaus this year.
+
 ## Genetic data analysis
 
 \textcolor{red}{TODO: sequencing and bash walkthrough: trace scripts as sets by format; citations}
@@ -59,7 +61,8 @@ This analysis indicates that living in Manaus, being elderly, and being male wer
 
 \textcolor{red}{TODO: tabular parsing; refer to figures; 66% of Manaus blood donors versus 22% of São Paulo blood donors. Captions, good axes, citations
 Fix fill for col}.
-Excess mortality in 50-55 year old male patients reached a maximum of 126 deaths/1000,  times their expected mortality of 99 deaths/1000, as well as 2.49 the excess mortality of female patients of the same age (54.8 deaths/1000).
+
+Excess mortality in 50-55 year old male patients reached a maximum of 126 deaths/1000, 1.30 times their expected mortality of 99 deaths/1000, as well as 2.49 the excess mortality of female patients of the same age at 54.8 deaths/1000 (\textcolor{red}{TODO: Figure number}; )
 
 ## Genetic data analysis
 
@@ -267,9 +270,9 @@ mortality_plot_f <- ggplot(data = mortality_data_f, aes(x = age, y = value, colo
                                 "Expected mortality female"),
                      values = c("coral", "darkseagreen4")) +
 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-
-  theme_clean()
+  theme_clean() +
+  
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 mortality_plot_f
 
@@ -278,7 +281,7 @@ ggsave(mortality_plot_f,
 
 ```
 
-**Figure**: Excess mortality, unexpected deaths of any cause, reached a maximum of about 2.5 times the expected mortality in female patients.
+**Figure**: Excess mortality, unexpected deaths of any cause, reached a maximum of 2.49 times the expected mortality in female patients.
 
 ```{r mortality-plot-m}
 # create a bar chart of male mortality in Manaus, March - June
@@ -299,9 +302,9 @@ mortality_plot_m <- ggplot(data = mortality_data_m, aes(x = age, y = value, colo
                                 "Expected mortality male"),
                      values = c("coral", "darkseagreen4")) +
 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-
-  theme_clean()
+  theme_clean() +
+  
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 mortality_plot_m
 
@@ -311,21 +314,6 @@ ggsave(mortality_plot_m,
 ```
 
 **Figure**: Excess mortality in male patients reached a maximum of more than double their expected mortality, as well as double the excess mortality of female patients.
-
-# Tables
-
-```{r example-table}
-# An example table to show the length of each gene using its start and end
-gene_table %>%
-  mutate(length = end - start) %>%
-  select(gene_name, start, end, length) %>%
-  knitr::kable(col.names = c("Gene Name",
-                             "Start",
-                             "End",
-                             "Length"))
-```
-
-**Table 1**: Gene names, locations, and lengths in the SARS-CoV-2 genome. Higher SNP counts in the S and N genes may be related to the larger size of these genes.
 
 # Sources Cited
 
