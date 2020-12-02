@@ -297,26 +297,17 @@ ggsave(mortality_plot_m,
 **Figure**: Excess mortality in male patients reached a maximum of more than double their expected mortality, as well as double the excess mortality of female patients.
 
 ```{r genetic-plot}
-# assess quality of VCF data using a plot from https://knausb.github.io/vcfR_documentation/visualization_1.html
-
-# create a plot of __ SNP locations within each gene across all samples
+# Create a table showing what genes had the greatest SNPs, where in Brazil
 vcf_with_metadata %>%
-  filter(!is.na(gene)) %>% # get rid of SNPs not in gene regions
-  # filter(geo_loc_name == ) %>%
-  group_by(gene, geo_loc_name) %>%
-  tally() %>% # this gives a column n for the number of gene by position
-  group_by(gene) %>%
-  tally() %>% # this collapses that down to the number of unique SNP locations
-  ggplot(aes(x = gene,
-             y = n)) +
-    geom_col() +
-    labs(title = "Count of distinct SNPs in Named SARS-CoV-2 Genes",
-         x = "Gene Name") +
-  theme_clean() # get rid of the grey background
-
+  group_by(geo_loc_name, qual, gene) %>%
+  tally() %>%
+  select(gene, geo_loc_name, qual) %>%
+  knitr::kable(col.names = c("Gene Name",
+                             "Brazillian State",
+                             "Quality"))
 ```
 
-**Figure**: N and S genes have more unique SNPs in the set of samples analyzed.
+**Figure**: The greatest numbers of high quality distinct SNPs in the named genes came from Maranhao and Para, Brazil.
 
 # Sources Cited
 
