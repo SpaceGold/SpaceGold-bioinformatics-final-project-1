@@ -26,32 +26,25 @@ This exploratory analysis of tabular and genetic data shows that the city of Man
 
 From Q2 into Q3, the intense period of infection correlated with the emergence of an antibody prevalence among Manaus blood donors that was approximately threefold greater than antibody prevalence among São Paulo blood donors [@Buss2020.09.16.20194787]. This is an indication of good news and herd immunity for Manaus, heading into Q4.
 
-Additionally, a genetic analysis of 33 SARS-CoV-2 samples showed that \textcolor{red}{TODO: sequencing and bash findings}.
+Additionally, a variant call analysis of 33 SARS-CoV-2 samples showed that the greatest numbers of high quality, distinct SNPs in the named genes originated in the Amazonian states of Maranhao and Para.
 
 # Methods
 
 ## Tabular data analysis
 
 \textcolor{red}{TODO: tabular parsing walkthrough: trace piping especially.}
-pkg citations; See methods section of https://elifesciences.org/articles/61981
-Describe what I did in prose form
-Data were downloaded from the NCBI SRA archive from project numbers _ on date. Then processed with trimmomatic and run through a bwa variant calling pipeline (CITATION from bwa paper). … That data was then brought into RStudio to analyze in combination
-Include steps of modifying datatables, e.g. age ranges
 
 In the final steps of data processing, I temporarily created a column in `Mortality_data.csv` that compared the ratios of mortality figures. I selected the age range 55-60 to show the maximum ratio seen between male and female excess mortality in Manaus this year.
 
 ## Genetic data analysis
 
-\textcolor{red}{TODO: sequencing and bash walkthrough: trace scripts as sets by format; citations}
+Illumina NGS runs were collected as 33 .fasta files from the [NCBI SRA website](https://www.ncbi.nlm.nih.gov/sra/). Under the project number PRJNA662684, the runs came grouped by region, being specific to the Brazillian Amazon. 
 
-* [vcfR package website](https://knausb.github.io/vcfR_documentation/index.html).
-* https://kjhealy.github.io/covdata/
-* https://github.com/como-ph/oxcovid19
-* https://ropensci.org/blog/2020/10/20/searching-medrxivr-and-biorxiv-preprint-data/
-* https://covidtracking.com/data/api
-  * `readr::read_csv("https://api.covidtracking.com/v1/states/daily.csv")`
-* https://rt.live/
-  * `readr::read_csv("https://d14wlfuexuxgcm.cloudfront.net/covid/rt.csv")`
+\textcolor{red}{TODO:Data were downloaded from the NCBI SRA archive from project numbers _ on date. Then processed with trimmomatic and run through a bwa variant calling pipeline (CITATION from bwa paper). … That data was then brought into RStudio to analyze in combination. Include steps of modifying datatables, if applicable.)}
+
+\textcolor{red}{TODO: sequencing and bash walkthrough: trace scripts as sets by format; citations} 
+
+Lastly, single nucleotide polymorphisms (SNPs) were tallied and grouped by region, gene, and quality (Table 1).
 
 # Results and Discussion
 
@@ -62,9 +55,11 @@ This analysis indicates that living in Manaus, being elderly, and being male wer
 \textcolor{red}{TODO: tabular parsing; refer to figures; 66% of Manaus blood donors versus 22% of São Paulo blood donors. Captions, good axes, citations
 Fix fill for col}.
 
-Excess mortality in 50-55 year old male patients reached a maximum of 126 deaths/1000, 1.30 times their expected mortality of 99 deaths/1000, as well as 2.49 the excess mortality of female patients of the same age at 54.8 deaths/1000 (\textcolor{red}{TODO: Figure number}; )
+Excess mortality in 50-55 year old male patients reached a maximum of 126 deaths/1000, 1.30 times their expected mortality of 99 deaths/1000, as well as 2.49 times the excess mortality of female patients of the same age at 54.8 deaths/1000 (Figure 6).
 
 ## Genetic data analysis
+
+The variant call analysis resulted in a set of __ high quality, distinct SNPs. The notable majority of these SNPs in named genes came from Maranhao and Para, as opposed to the other nearby Amazonian states (Table 1). 
 
 \textcolor{red}{TODO: fastqc screenshot: evidence that it’s reasonable
 Quality, length, WATCH a few weeks ago on fastqc examples with one goofy one
@@ -145,7 +140,8 @@ ggsave(plot = confirmed_plot,
        filename = "output/figures/confirmed_plot.png")
 ```
 
-**Figure **: The state of São Paulo saw more total confirmed cases than the state of Amazonas.
+**Figure 1**: The state of São Paulo saw more total confirmed cases than the state of Amazonas.
+\newpage
 
 ```{r population-plot}
 # produce a pie chart highlighting Sao Paulo and Amazonas vs Total
@@ -170,7 +166,8 @@ ggsave(plot = population_plot,
        filename = "output/figures/population_plot.png")
 ```
 
-**Figure**: The state of São Paulo is much larger than Amazonas by population at 46 million versus 4 million.
+**Figure 2**: The state of São Paulo is much larger than Amazonas by population at 46 million versus 4 million.
+\newpage
 
 ```{r per-capita-plot}
 # produce a dual line plot of confirmed cases by state, Amazonas or São Paulo
@@ -203,7 +200,8 @@ ggsave(per_capita_plot,
        filename = "output/figures/per_capita_plot.png")
 ```
 
-**Figure**: Amazonas saw greater confirmed cases per capita than São Paulo.
+**Figure 3**: Amazonas saw greater confirmed cases per capita than São Paulo.
+\newpage
 
 ```{r prevalence-plot}
 # produce a dual-line plot of seroreversion adjusted prevalence of SARS-CoV-2
@@ -230,7 +228,8 @@ prevalence_plot
 ```
 
 
-**Figure**: Manaus saw more widespread prevalence of SARS-CoV-2 antibodies vs. São Paulo, up to 66% vs. 22% of the population respectively.
+**Figure 4**: Manaus saw more widespread prevalence of SARS-CoV-2 antibodies vs. São Paulo, up to 66% vs. 22% of the population respectively.
+\newpage
 
 ```{r mortality-plot-f}
 # create a bar chart of female mortality in Manaus, March - June
@@ -262,7 +261,8 @@ ggsave(mortality_plot_f,
 
 ```
 
-**Figure**: Excess mortality, unexpected deaths of any cause, reached a maximum of 2.49 times the expected mortality in female patients.
+**Figure 5**: Excess mortality, unexpected deaths of any cause, reached a maximum of 2.49 times the expected mortality in female patients.
+\newpage
 
 ```{r mortality-plot-m}
 # create a bar chart of male mortality in Manaus, March - June
@@ -294,9 +294,12 @@ ggsave(mortality_plot_m,
 
 ```
 
-**Figure**: Excess mortality in male patients reached a maximum of more than double their expected mortality, as well as double the excess mortality of female patients.
+**Figure 6**: Excess mortality in male patients reached a maximum of more than double their expected mortality, as well as double the excess mortality of female patients.
+\newpage
 
-```{r genetic-plot}
+# Tables
+
+```{r genetic-table}
 # Create a table showing what genes had the greatest SNPs, where in Brazil
 vcf_with_metadata %>%
   group_by(geo_loc_name, qual, gene) %>%
@@ -307,21 +310,6 @@ vcf_with_metadata %>%
                              "Quality"))
 ```
 
-**Figure**: The greatest numbers of high quality distinct SNPs in the named genes came from Maranhao and Para, Brazil.
+**Table 1**: The greatest numbers of high quality, distinct SNPs in the named genes came from Maranhao and Para, Brazil.
 
 # Sources Cited
-
-\textcolor{red}{TODO: say scripts provided by Naupaka Zimmerman “and based on an approach from data carpentry CC”  sentence in methods section.
-In template README steps of this were based on data carpentry, include this in methods
-Webpage URLs should be in code, not cited. If complicated.
-“Figured it out based on approach here”
-Packages in bibtex? Diff schools of thought. 
-Objection that it pollutes biblio
-Dr. Z leans toward code side
-Definitely cite oxford19 but not base r packages
-Can use this for wiggle room. Prefers at least a few peer reviewed articles
-Adding bibtex and citing
-Demonstrate skills to use both in Rmd.
-If you want to mention a webpage or article, how formal: peer reviewed yes, r pkg, have citation function that will give it to you; markdown link is ok for webpage; or create BibTex for website}
-
-https://knausb.github.io/vcfR_documentation/visualization_1.html
