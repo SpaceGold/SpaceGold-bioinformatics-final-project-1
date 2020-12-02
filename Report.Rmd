@@ -314,7 +314,6 @@ vcf_with_metadata %>%
          x = "Gene Name") +
   theme_clean() # get rid of the grey background
 
-
 ```
 
 **Figure**: N and S genes have more unique SNPs in the set of samples analyzed.
