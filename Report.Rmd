@@ -299,15 +299,21 @@ ggsave(mortality_plot_m,
 ```{r genetic-plot}
 # assess quality of VCF data using a plot from https://knausb.github.io/vcfR_documentation/visualization_1.html
 
-# Input the files.
-vcf <- read.vcfR("data/11_vcf_output_for_R/SRR12620259_1.trim.fastq.bwa-output.sorted.bam.raw.bcf.final-variants.vcf", verbose = FALSE)
-dna <- ape::read.dna("/data/sars_vcf_analysis/02_genome_reference/sars_refgenome.fasta",
-                     format = "fasta")
-gff <- read.table("/data/sars_vcf_analysis/02_genome_reference/sars_refgenome_annotation.gff",
-                  sep="\t", quote="")
+# create a plot of __ SNP locations within each gene across all samples
+vcf_with_metadata %>%
+  filter(!is.na(gene)) %>% # get rid of SNPs not in gene regions
+  # filter(geo_loc_name == ) %>%
+  group_by(gene, geo_loc_name) %>%
+  tally() %>% # this gives a column n for the number of gene by position
+  group_by(gene) %>%
+  tally() %>% # this collapses that down to the number of unique SNP locations
+  ggplot(aes(x = gene,
+             y = n)) +
+    geom_col() +
+    labs(title = "Count of distinct SNPs in Named SARS-CoV-2 Genes",
+         x = "Gene Name") +
+  theme_clean() # get rid of the grey background
 
-# Create a chromR object.
-chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
 
 ```
 
