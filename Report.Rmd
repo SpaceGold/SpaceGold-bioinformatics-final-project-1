@@ -232,25 +232,6 @@ prevalence_plot
 
 **Figure**: Manaus saw more widespread prevalence of SARS-CoV-2 antibodies vs. São Paulo, up to 66% vs. 22% of the population respectively.
 
-```{r genetic-plot}
-# create a plot of __ SNP locations within each gene across all samples
-vcf_with_metadata %>%
-  filter(!is.na(gene)) %>% # get rid of SNPs not in gene regions
-  # filter(geo_loc_name == ) %>%
-  group_by(gene, geo_loc_name) %>%
-  tally() %>% # this gives a column n for the number of gene by position
-  group_by(gene) %>%
-  tally() %>% # this collapses that down to the number of unique SNP locations
-  ggplot(aes(x = gene,
-             y = n)) +
-    geom_col() +
-    labs(title = "Count of distinct SNPs in Named SARS-CoV-2 Genes",
-         x = "Gene Name") +
-  theme_clean() # get rid of the grey background
-```
-
-**Figure**: N and S genes have more unique SNPs in the set of samples analyzed.
-
 ```{r mortality-plot-f}
 # create a bar chart of female mortality in Manaus, March - June
 mortality_data_f <- readr::read_csv("data/raw_data/Excess_mortality.csv") %>%
@@ -315,6 +296,23 @@ ggsave(mortality_plot_m,
 
 **Figure**: Excess mortality in male patients reached a maximum of more than double their expected mortality, as well as double the excess mortality of female patients.
 
+```{r genetic-plot}
+# assess quality of VCF data using a plot from https://knausb.github.io/vcfR_documentation/visualization_1.html
+
+# Input the files.
+vcf <- read.vcfR("data/11_vcf_output_for_R/SRR12620259_1.trim.fastq.bwa-output.sorted.bam.raw.bcf.final-variants.vcf", verbose = FALSE)
+dna <- ape::read.dna("/data/sars_vcf_analysis/02_genome_reference/sars_refgenome.fasta",
+                     format = "fasta")
+gff <- read.table("/data/sars_vcf_analysis/02_genome_reference/sars_refgenome_annotation.gff",
+                  sep="\t", quote="")
+
+# Create a chromR object.
+chrom <- create.chromR(name="Supercontig", vcf=vcf, seq=dna, ann=gff, verbose=TRUE)
+
+```
+
+**Figure**: N and S genes have more unique SNPs in the set of samples analyzed.
+
 # Sources Cited
 
 \textcolor{red}{TODO: say scripts provided by Naupaka Zimmerman “and based on an approach from data carpentry CC”  sentence in methods section.
@@ -330,3 +328,4 @@ Adding bibtex and citing
 Demonstrate skills to use both in Rmd.
 If you want to mention a webpage or article, how formal: peer reviewed yes, r pkg, have citation function that will give it to you; markdown link is ok for webpage; or create BibTex for website}
 
+https://knausb.github.io/vcfR_documentation/visualization_1.html
