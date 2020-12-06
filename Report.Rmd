@@ -144,7 +144,7 @@ ggsave(plot = confirmed_plot,
 \newpage
 
 ```{r population-plot}
-# produce a pie chart highlighting Sao Paulo and Amazonas vs Total
+# produce a pie chart highlighting São Paulo and Amazonas vs Total
 population_path <- readr::read_csv("data/raw_data/Brazil_populations.csv")
 population_data <- population_path %>%
   group_by(population) %>%
@@ -205,7 +205,7 @@ ggsave(per_capita_plot,
 
 ```{r prevalence-plot}
 # produce a dual-line plot of seroreversion adjusted prevalence of SARS-CoV-2
-# antibodies across Manaus and Sao Paulo
+# antibodies across Manaus and São Paulo
 prevalence_data <- readr::read_csv("data/raw_data/Adjusted_prevalence.csv") %>%
   # lubridate::month(date) %>%
   tidyr::pivot_longer(!date, names_to="region")
@@ -216,7 +216,7 @@ prevalence_plot <- prevalence_data %>%
        x = "Month",
        y = "Antibody prevalence (% of population)") +
   scale_color_manual("City",
-                     labels = c("Manaus", "Sao Paulo"),
+                     labels = c("Manaus", "São Paulo"),
                      values = c("cyan", "red")) +
 
   theme_clean()
@@ -294,7 +294,7 @@ ggsave(mortality_plot_m,
 
 ```
 
-**Figure 6**: Excess mortality in male patients reached a maximum of more than double their expected mortality, as well as double the excess mortality of female patients.
+\textcolor{red}{TODO: unique caption}
 \newpage
 
 # Tables
