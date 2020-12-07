@@ -1,10 +1,12 @@
 ---
-title: 'Accelerated case rates led to herd immunity but also elderly and male mortality in Amazonas, Brazil during the COVID-19 pandemic'
+title: 'Accelerated case rates led to herd immunity but elderly and male mortality in Amazonas, Brazil during the COVID-19 pandemic'
 author: "Adam Zimmerman"
 date: "December 1, 2020"
 output: pdf_document
 csl: bioinformatics.csl
 bibliography: references.bib
+classoption:
+- twocolumn
 params:
   gff_file_path: "/data/sars_vcf_analysis/02_genome_reference/sars_refgenome_annotation.gff"
   vcf_dir_path: "data/11_vcf_output_for_R"
@@ -26,7 +28,7 @@ This exploratory analysis of three epidemiological and one genetic data sets beg
 
 From Q2 into Q3, the intense period of infection correlated with the emergence of an antibody prevalence among Manaus blood donors that was approximately threefold greater than antibody prevalence among São Paulo blood donors [Figure 4; @Buss2020.09.16.20194787]. This was an indication of good news and herd immunity for Manaus, heading into Q4. But the path to that antibody prevalence was characterized by a two- to three-fold increase in mortality for Manaus residents, especially those that were male and over 65 [Figure 6; @Prowse2020.09.25.20201939].
 
-Genetic data contributed one more distinct, undeniable trend for the Amazon. A variant call analysis of 33 SARS-CoV-2 samples from patients across the Northern Brazilian states surrounding Manaus showed that the great majority of single nucleotide polymorphisms (SNPs) displayed substitutions of thymine with guanine (Figure 8).
+Genetic data contributed one more distinct, undeniable trend for the Amazon. A variant call analysis of 33 SARS-CoV-2 samples from patients across the Northern Brazilian states surrounding Manaus showed that the great majority of single nucleotide polymorphisms (SNPs) displayed transitions from thymine to cytosine (Figure 8).
 
 # Methods
 
@@ -34,7 +36,7 @@ Genetic data contributed one more distinct, undeniable trend for the Amazon. A v
 
 [Rstudio 4.0.2](https://rstudio.com/) and [Ubuntu 20.04](https://ubuntu.com/) powered three novel analyses of public tabular data (Figures 1-6), alongside a variant call analysis based on code by [Naupaka Zimmerman](https://github.com/naupaka) (Figures 7-8).
 
-The pre-print data browsing tool `medrxivr` contributed to the initial exploration of tabular data, as did `OxCOVID19` [@McGuinness; @Mahdi]. Several R packages supported data reading, tidying, filtering, and formatting [@dplyr; @tidyr; @readr; @lubridate]. Hadley Wickam's invaluable `ggplot2` package rendered Figures 1-6 and Figure 8, with help from `ggthemes`. [@ggplot2; @ggthemes]. Figure 7 is a screenshot from variant call analysis made possible by VCFR [@VCFR].
+The pre-print data browsing tool `medrxivr` contributed to the initial exploration of tabular data, as did `OxCOVID19` [@McGuinness; @Mahdi]. Hadley Wickam wrote and co-wrote several R packages that supported data reading, tidying, filtering, and formatting [@dplyr; @tidyr; @readr; @lubridate]. His invaluable `ggplot2` package rendered Figures 1-6 and Figure 8, with help from `ggthemes`. [@ggplot2; @ggthemes]. Figure 7 is a screenshot from variant call analysis made possible by VCFR [@VCFR].
 
 ## Tabular data methods
 
@@ -46,7 +48,7 @@ Prowse and colleagues also reported on herd immunity in the Amazon and Northern 
 
 ## Genetic data methods
 
-Across Q2 and Q3 of 2020, scientists across Norhtern Brazil and the Amazon collected 33 Illumina NGS samples and posted them as `.fasta` files on the [NCBI SRA website under the project number PRJNA662684](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA662684).
+Across Q2 and Q3 of 2020, scientists across Norhtern Brazil and the Amazon collected 33 Illumina NGS samples and posted them as `.fasta` files on the website of the National Center for Biotechnology Information (NCBI) under the project number [PRJNA662684](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA662684).
 
 Within a [Makefile](https://www.gnu.org/software/make/manual/make.html), quality checking scripts demonstrated the high quality of the majority of this data. Next, a trimmomatic script based on code by [Data Carpentry](https://datacarpentry.org/wrangling-genomics/03-trimming/index.html) removed the shorter, lower quality runs from the analysis. Several more bash scripts based on code by [C. Titus Brown and colleagues](https://angus.readthedocs.io/en/2017/variant-calling.html) compared the reads to the NCBI's reference SARS-CoV-2 genome to output a `.vcf` variant call format file for interpretation in RStudio. Lastly, single nucleotide polymorphisms (SNPs) were checked for quality (Figure 7) and grouped by position and nucleotide substitution (Figure 8).
 
@@ -69,7 +71,7 @@ In summary, living in Manaus, being over 65, and being male correlated with elev
 Typical read quality was high across the 33 SARS-CoV-2 samples in the the Northern Brazil NCBI project analyzed
 0 (Figure 7).
 
-The majority of single nucleotide polymorphism mutations (SNPs) among Brazilian sample genomes were substitutions of thymine with guanine (Figure 8). Contextualizing this clear trend could be a fruitful direction for further discovery.
+The majority of single nucleotide polymorphism mutations (SNPs) among Brazilian sample genomes were pyrimidine transitions from thymine to cytosine (Figure 8). Contextualizing this clear trend could be a fruitful direction for further discovery.
 
  ```{r load-packages-and-functions}
 # These functions are also listed in DESCRIPTION for .travis.yml
@@ -148,7 +150,6 @@ ggsave(plot = confirmed_plot,
 ```
 
 **Figure 1**: The state of São Paulo saw more total confirmed cases than the state of Amazonas.
-\newpage
 
 ```{r population-plot}
 # produce a pie chart highlighting São Paulo and Amazonas vs Total
@@ -174,7 +175,6 @@ ggsave(plot = population_plot,
 ```
 
 **Figure 2**: The state of São Paulo is much larger than Amazonas by population at 46 million versus 4 million.
-\newpage
 
 ```{r per-capita-plot}
 # produce a dual line plot of confirmed cases by state, Amazonas or São Paulo
@@ -208,7 +208,6 @@ ggsave(per_capita_plot,
 ```
 
 **Figure 3**: Amazonas saw greater confirmed cases per capita than São Paulo.
-\newpage
 
 ```{r prevalence-plot}
 # produce a dual-line plot of seroreversion adjusted prevalence of SARS-CoV-2
@@ -235,7 +234,6 @@ prevalence_plot
 ```
 
 **Figure 4**: Manaus saw more widespread prevalence of SARS-CoV-2 antibodies vs. São Paulo, up to 66% vs. 22% of the population respectively.
-\newpage
 
 ```{r mortality-plot-f}
 # create a bar chart of female mortality in Manaus, March - June
@@ -268,7 +266,6 @@ ggsave(mortality_plot_f,
 ```
 
 **Figure 5**: Excess mortality in women peaked at 2.78x times expected mortality in the age group 65-70 years, with a total mortality of 283 deaths per 1000 residents of Manaus.
-\newpage
 
 ```{r mortality-plot-m}
 # create a bar chart of male mortality in Manaus, March - June
@@ -303,12 +300,10 @@ ggsave(mortality_plot_m,
 ```
 
 **Figure 6**: Excess mortality in men peaked at 3.42 times expected mortality in the age group 65-70 years, resulting in a total mortality of 510 deaths per 1000 residents of Manaus. Men in this age group died at 1.80 times the rate of death for women of the same age group.
-\newpage
 
 ![](output/figures/quality.png)
 
-**Figure 7**: A typical fastq sample of SARS-CoV-2 from Northern Brazil showed high read quality, with most reads scoring above 26. 
-\newpage
+**Figure 7**: A typical fastq sample of SARS-CoV-2 from Northern Brazil showed high read quality, with most reads scoring above 26.
 
 ```{r snps-plot}
 # Create a plot showing the distribution of SNPs by position, ref, alt
@@ -335,7 +330,6 @@ ggsave(snps,
        filename = "output/figures/SNP_pos_and_nuc.png")
 ```
 
-**Figure 8**: The majority of single nucleotide polymorphism mutations among Brazilian sample genomes were substitutions of thymine with guanine.
-\newpage
+**Figure 8**: The majority of single nucleotide polymorphism mutations among Brazilian sample genomes were transitions from thymine to cytosine.
 
 # Sources Cited
