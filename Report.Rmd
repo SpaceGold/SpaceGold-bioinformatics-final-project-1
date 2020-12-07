@@ -301,16 +301,18 @@ ggsave(mortality_plot_m,
 
 ```{r genetic-table}
 # Create a facet figure showing the distribution of SNPs
-locations_facet_data <- vcf_with_metadata %>%
-  group_by(pos, ref, alt) %>%
-  tally()
+snps_data <- vcf_with_metadata %>%
+  select(pos, ref, alt)
 
-locations_facet <- ggplot(data = locations_facet_data,
-                          aes(x = pos, y = ref)) +
-  geom_point() +
-  facet_grid()
+# Combine sets
+ref_alt <- snps_data %>% tidyr::pivot_longer(!pos, names_to="ref_or_alt")
 
-locations_facet
+# Plot SNP tally by location, ref
+snps <- ggplot(data = ref_alt, aes(x = pos, y = value, color = ref_or_alt)) +
+  geom_point(aes(color = ref_or_alt, fill = ref_or_alt))
+snps
+
+# TODO: plot alt
 
 ggsave(locations_facet,
        filename = "output/figures/locations_facet.png")
