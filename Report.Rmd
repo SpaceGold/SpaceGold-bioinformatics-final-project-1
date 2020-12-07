@@ -263,8 +263,8 @@ mortality_plot_f <- ggplot(data = mortality_data_f,
                      values = c("coral", "darkseagreen4")) +
 
   theme_clean() +
-  
-  # rotate axes: https://stackoverflow.com/questions/1330989/rotating-and-spacing-axis-labels-in-ggplot2
+
+  # rotate axes: https://tinyurl.com/ydgq5nt3
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 mortality_plot_f
@@ -298,15 +298,14 @@ mortality_plot_m <- ggplot(data = mortality_data_m,
                      values = c("coral", "turquoise")) +
 
   theme_clean() +
-  
-  # rotate axes: https://stackoverflow.com/questions/1330989/rotating-and-spacing-axis-labels-in-ggplot2
+
+  # rotate axes: https://tinyurl.com/ydgq5nt3
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 mortality_plot_m
 
 ggsave(mortality_plot_m,
        filename = "output/figures/mortality_plot_m.png")
-
 ```
 
 **Figure 6**: Excess mortality in men peaked at 3.42 times expected mortality in the age group 65-70 years, resulting in a total mortality of 510 deaths per 1000 residents of Manaus. Men in this age group died at 1.80 times the rate of death for women of the same age group.
