@@ -30,11 +30,15 @@ Genetic data contributed one more distinct, undeniable trend for the Amazon. A v
 
 # Methods
 
+## Software
+
 [Rstudio 4.0.2](https://rstudio.com/) and [Ubuntu 20.04](https://ubuntu.com/) powered three novel analyses of public tabular data (Figures 1-6), alongside a variant call analysis based on code by [Naupaka Zimmerman](https://github.com/naupaka) (Figures 7-8).
+
+The pre-print data browsing tool `medrxivr` contributed to the initial exploration of tabular data, as did `OxCOVID19` [@McGuinness; @Mahdi]. Several R packages supported data reading, tidying, filtering, and formatting [@dplyr; @tidyr; @readr; @lubridate]. Hadley Wickam's invaluable `ggplot2` package rendered Figures 1-6 and Figure 8, with help from `ggthemes`. [@ggplot2; @ggthemes]. Figure 7 is a screenshot from variant call analysis made possible by VCFR [@VCFR].
 
 ## Tabular data methods
 
-Throughout 2020, Oxford University hosted and made freely accessible large amount of tabular epidemiological COVID-19 data from across the world [(OxCOVID19)](https://covid19.eng.ox.ac.uk/). This provided the demographics and case rates data of Manaus and São Paulo (Figures 1-3).
+Throughout 2020, Oxford University hosted and made freely accessible large amount of tabular epidemiological COVID-19 data from across the world [@Mahdi]. This provided the demographics and case rates data of Manaus and São Paulo (Figures 1-3).
 
 Buss and colleagues inferred elevated levels of herd immunity in Manaus from their tabular data, which included antibody prevalence [Figure 4; @Buss2020.09.16.20194787]. Figure 4 collapses multi-week date ranges to a single data point per month. The source data include specific dates, as well as antibody prevalence values before and after adjusting for seroreversion over time. For full details, refer to Table 1 of Buss and colleagues' pre-print paper [@Buss2020.09.16.20194787].
 
@@ -75,7 +79,7 @@ library("dplyr")
 library("tidyr")
 library("readr")
 library("ggthemes")
-library("medrxivr")
+# library("medrxivr")
 library("oxcovid19")
 library("lubridate")
 
@@ -303,7 +307,7 @@ ggsave(mortality_plot_m,
 
 ![](output/figures/quality.png)
 
-**Figure 7**: A typical fastq sample of SARS-CoV-2 from northern Brazil showed high read quality, with most reads scoring above 26. 
+**Figure 7**: A typical fastq sample of SARS-CoV-2 from Northern Brazil showed high read quality, with most reads scoring above 26. 
 \newpage
 
 ```{r snps-plot}
