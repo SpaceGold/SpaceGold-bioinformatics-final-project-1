@@ -22,23 +22,29 @@ knitr::opts_chunk$set(echo = FALSE,
 
 What happened in the Amazon and São Paulo during COVID-19? 
 
-This exploratory analysis of tabular and genetic data shows that the city of Manaus, and its state, Amazonas, were hit harder per capita than the city and state of São Paulo through the second (Q2) and third quarters (Q3) of 2020 \textcolor{red}{TODO: additional citations}. Deaths were especially high for elderly patients, as well as male patients in Manaus. 
+This exploratory analysis of tabular and genetic data shows that the city of Manaus, and its Northern Brazilian state, Amazonas, were hit harder per capita than the city and state of São Paulo through the second and third quarters (Q2; Q3) of 2020.
 
-From Q2 into Q3, the intense period of infection correlated with the emergence of an antibody prevalence among Manaus blood donors that was approximately threefold greater than antibody prevalence among São Paulo blood donors [@Buss2020.09.16.20194787]. This is an indication of good news and herd immunity for Manaus, heading into Q4.
+From Q2 into Q3, the intense period of infection correlated with the emergence of an antibody prevalence among Manaus blood donors that was approximately threefold greater than antibody prevalence among São Paulo blood donors [Figure 4; @Buss2020.09.16.20194787]. This is an indication of good news and herd immunity for Manaus, heading into Q4. But the path to that antibody prevalence was characterized by a two- to three-fold increase in mortality for Manaus residents, especially those that were male and over 65 [Figure 6; @Prowse2020.09.25.20201939].
 
-Additionally, a variant call analysis of 33 SARS-CoV-2 samples showed that the greatest numbers of high quality, distinct SNPs in the named genes originated in the Amazonian states of Maranhao and Para.
+Additionally, a variant call analysis of 33 SARS-CoV-2 samples from patients across the Northern Brazilian states surrounding Manaus showed that the greatest numbers of high quality single nucleotide polymorphisms (SNPs) displayed substitutions of thymine with guanine.
 
 # Methods
 
+[Rstudio 4.0.2](https://rstudio.com/) and [Ubuntu 20.04](https://ubuntu.com/) powered three novel analyses of public tabular data (Figures 1-6), alongside a variant call analysis based on code by [Naupaka Zimmerman](https://github.com/naupaka)(Figures 7-8).
+
 ## Tabular data methods
 
-\textcolor{red}{TODO: tabular parsing walkthrough: trace piping especially.}
+Throughout 2020, Oxford University hosted and made freely accessible large amount of tabular epidemiological COVID-19 data from across the world [(OxCOVID19)](https://covid19.eng.ox.ac.uk/). This provided the demographics and case rates data of Manaus and São Paulo (Figures 1-3).
 
-In the final steps of data processing, I temporarily created a column in `Mortality_data.csv` that compared the ratios of mortality figures. I selected the age range 55-60 to show the maximum ratio seen between male and female excess mortality in Manaus, March through June, 2020.
+Buss and colleagues inferred elevated levels of herd immunity in Manaus from their tabular data, which included antibody prevalence [Figure 4; @Buss2020.09.16.20194787]. Figure 4 collapses multi-week date ranges to a single data point per month; the source data and specific dates can be found in Table 1 of Buss and colleagues' preprint paper [@Buss2020.09.16.20194787].
+
+Prowse and colleagues also reported on herd immunity in the Amazon and Northern Brazil, providing risk factor data, including mortality by age and sex [Figures 4-5; @Prowse2020.09.25.20201939].
 
 ## Genetic data methods
 
-Illumina NGS runs were collected as 33 .fasta files from the [NCBI SRA website](https://www.ncbi.nlm.nih.gov/sra/). Under the project number PRJNA662684, the runs came grouped by region, being specific to the Brazillian Amazon. 
+Across Q2 and Q3 of 2020, Brazilian scientists collected 33 Illumina NGS samples and posted them as `.fasta` files on the [NCBI SRA website](https://www.ncbi.nlm.nih.gov/sra/). Under the project number PRJNA662684, the runs came grouped by region, subsetted down to the Brazilian Amazon.
+
+
 
 \textcolor{red}{TODO:Data were downloaded from the NCBI SRA archive from project numbers _ on date. Then processed with trimmomatic and run through a bwa variant calling pipeline (CITATION from bwa paper). … That data was then brought into RStudio to analyze in combination. Include steps of modifying datatables, if applicable.)}
 
@@ -52,18 +58,20 @@ Lastly, single nucleotide polymorphisms (SNPs) were tallied and grouped by regio
 
 Cities like Manaus track and report mortality on an ongoing basis, setting a baseline for deaths per week. Excess mortality is the observed number of deaths, minus the baseline expected mortality. Mortality is measured in deaths per 1000 people.
 
-Total female mortality (996) was more than double (2.13x) expected mortality (468) in the oldest age group of patients, over 75 [not pictured; @Prowse2020.09.25.20201939]. In the second-most affected female age group, slightly younger at ages 65-70, total mortality (283) was 1.56x expected mortality (102) [Figure 4; @Prowse2020.09.25.20201939].
+Prowse and colleagues reported that Manaus was the most quickly and severely hit city in the hardest hit region of the Amazon/Northern Brazil [Figure 4; @Prowse2020.09.25.20201939]. OxCOVID19 data corroborated this, showing that Manaus was hit much harder per capita than São Paulo [Figure 1-3; (OxCOVID19)](https://covid19.eng.ox.ac.uk/). Buss and colleagues contributed antibody prevalence data consistent with the herd immunity interpretation [Figure 4; @Buss2020.09.16.20194787].
 
-In contrast, total male mortality (1208) were higher in raw numbers, as well as in proportion (3.16x) to expected mortality (382) in the oldest age group of patients, over 75 [not pictured; @Prowse2020.09.25.20201939]. This ratio was the most severe (3.42x) across both sexes and all age groups in men, ages 65-70, at an expected mortality of 149 versus an observed mortality of 510 [Figure 6; @Prowse2020.09.25.20201939].
+Prowse and colleagues showed that total female mortality (996) was more than double (2.13x) expected mortality (468) in the oldest age group of patients, over 75 [not pictured; @Prowse2020.09.25.20201939]. In fact, the situation was worse for slightly younger female patients, ages 65-70, who faced a total mortality (283) 2.78x expected mortality (102) [Figure 5; @Prowse2020.09.25.20201939].
 
-In summary, living in Manaus, being over 65, and being male correlated with elevated mortality for Brazilians facing COVID-19 in Q2 and Q3 of 2020.
+In contrast, total male mortality (1208) were higher in raw numbers, as well as in proportion (3.16x) to expected mortality (382) in the oldest age group of patients, over 75 [not pictured; @Prowse2020.09.25.20201939]. The ratio of expected (149) to observed mortality (510) was most severe at 3.42x in men, ages 65-70 [Figure 6; @Prowse2020.09.25.20201939].
+
+In summary, living in Manaus, being over 65, and being male correlated with elevated case rates per capita, antibody prevalence, and mortality for Brazilians facing COVID-19 in Q2 and Q3 of 2020.
 
 ## Genetic data analysis
 
 Typical read quality was high across the 33 SARS-CoV-2 samples in the the Northern Brazil NCBI project analyzed
 0 (Figure 7).
 
-The majority of single nucleotide polymorphism mutations (SNPs) among Brazilian sample genomes were substitutions of thymine with guanine (Figure 8).
+The majority of single nucleotide polymorphism mutations (SNPs) among Brazilian sample genomes were substitutions of thymine with guanine (Figure 8). While this trend is very clear, the implications of it would require further discovery to elucidate.
 
  ```{r load-packages-and-functions}
 # These functions are also listed in DESCRIPTION for .travis.yml
@@ -260,7 +268,7 @@ ggsave(mortality_plot_f,
 
 ```
 
-**Figure 5**: Excess female mortality reached a maximum of 2.49 times the expected mortality in female patients.
+**Figure 5**: Excess female mortality reached a maximum of 2.13 times the expected mortality in female patients at .
 \newpage
 
 ```{r mortality-plot-m}
