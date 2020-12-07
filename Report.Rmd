@@ -81,7 +81,7 @@ library("dplyr")
 library("tidyr")
 library("readr")
 library("ggthemes")
-# library("medrxivr")
+library("medrxivr")
 library("oxcovid19")
 library("lubridate")
 
@@ -123,9 +123,8 @@ con <- connect_oxcovid19()
 epi_tab <- get_table(con = con, tbl_name = "epidemiology")
 
 ## Step 3: Query the epidemiology table to show data for Brazil
-bra_epi_tab <- dplyr::filter(.data = epi_tab, countrycode == "BRA", adm_area_1 
+bra_epi_tab <- dplyr::filter(.data = epi_tab, countrycode == "BRA", adm_area_1
                              %in% c("Amazonas", "São Paulo"))
-# readr::write_csv(bra_epi_tab, "./output/confirmed.csv")
 ```
 
 # Figures
@@ -136,7 +135,7 @@ confirmed_plot <- bra_epi_tab %>%
   group_by(date) %>%
   ggplot(aes(x = date,
              y = confirmed)) +
-  geom_line(aes(colour=adm_area_1)) +
+  geom_line(aes(colour = adm_area_1)) +
   labs(title = "Confirmed COVID-19 cases over time",
        x = "Date",
        y = "Confirmed Cases",
@@ -159,12 +158,15 @@ population_data <- population_path %>%
   dplyr::filter(RegionName %in% c("Amazonas", "São Paulo", "Total"))
 
 # Remove Amazonas and São Paulo populations from Total
-population_data[3,3] <- (population_data[3,3] - population_data[2,3] - population_data[1,3])
+population_data[3, 3] <- (population_data[3, 3]
+                         - population_data[2, 3]
+                         - population_data[1, 3])
 
-# Basic piechart
-population_plot <- ggplot(population_data, aes(x="", y=population, fill=RegionName)) +
-  geom_bar(stat="identity", width=1, color="white") +
-  coord_polar("y", start=0) +
+# Basic pie chart
+population_plot <- ggplot(population_data,
+                          aes(x = "", y = population, fill = RegionName)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar("y", start = 0) +
   labs(title = "Population of Brazil", color = "State") +
   theme_void() # remove background, grid, numeric labels
 
@@ -181,20 +183,26 @@ ggsave(plot = population_plot,
 per_capita_amazonas <- bra_epi_tab %>%
   dplyr::filter(adm_area_1 == "Amazonas") %>%
   group_by(date) %>%
-  dplyr::mutate(per_capita_a = confirmed/4207714) %>%
+  # divide by population for per capita
+  dplyr::mutate(per_capita_a = confirmed / 4207714) %>%
   dplyr::select(date, per_capita_a)
 
 per_capita_sp <- bra_epi_tab %>%
   dplyr::filter(adm_area_1 == "São Paulo") %>%
   group_by(date) %>%
-  dplyr::mutate(per_capita_s = confirmed/46289333) %>%
+  # divide by population for per capita
+  dplyr::mutate(per_capita_s = confirmed / 46289333) %>%
   dplyr::select(date, per_capita_s)
 
 # per_capita_amazonas
 # per_capita_sp
 per_capita_plot <- ggplot() +
-  geom_line(data=per_capita_amazonas, aes(x = date, y = per_capita_a, color = "Amazonas")) +
-  geom_line(data=per_capita_sp, aes(x = date, y = per_capita_s, color = "São Paulo")) +
+  geom_line(data = per_capita_amazonas, aes(x = date,
+                                          y = per_capita_a,
+                                          color = "Amazonas")) +
+  geom_line(data = per_capita_sp, aes(x = date,
+                                    y = per_capita_s,
+                                    color = "São Paulo")) +
   labs(title = "Confirmed COVID-19 cases per capita over time",
        x = "Date",
        y = "Confirmed Cases Per Capita",
@@ -213,8 +221,7 @@ ggsave(per_capita_plot,
 # produce a dual-line plot of seroreversion adjusted prevalence of SARS-CoV-2
 # antibodies across Manaus and São Paulo
 prevalence_data <- readr::read_csv("data/raw_data/Adjusted_prevalence.csv") %>%
-  # lubridate::month(date) %>%
-  tidyr::pivot_longer(!date, names_to="region")
+  tidyr::pivot_longer(!date, names_to = "region")
 prevalence_plot <- prevalence_data %>%
   ggplot() +
   geom_line(aes(x = date, y = value, color = region)) +
@@ -239,16 +246,17 @@ prevalence_plot
 # create a bar chart of female mortality in Manaus, March - June
 mortality_data_f <- readr::read_csv("data/raw_data/Excess_mortality.csv") %>%
   select(-observed_mort_f, -excess_mort_total,
-         -excess_mort_percent, -observed_mort_m, -excess_mort_m, -expected_mort_m) %>%
-  tidyr::pivot_longer(!age, names_to="mortality")
+         -excess_mort_percent, -observed_mort_m,
+         -excess_mort_m, -expected_mort_m) %>%
+  tidyr::pivot_longer(!age, names_to = "mortality")
 
 
-mortality_plot_f <- ggplot(data = mortality_data_f, aes(x = age, y = value, color = mortality)) +
+mortality_plot_f <- ggplot(data = mortality_data_f,
+                           aes(x = age, y = value, color = mortality)) +
   geom_col(aes(color = mortality, fill = mortality)) +
   labs(title = "Female mortality in Manaus, March 2020 to June 2020",
        x = "Age",
        y = "Deaths per 1000") +
-  # scale_x_discrete(position = "")
   scale_color_manual("Patient mortality classification",
                      labels = c("Excess mortality female",
                                 "Expected mortality female"),
@@ -256,7 +264,8 @@ mortality_plot_f <- ggplot(data = mortality_data_f, aes(x = age, y = value, colo
 
   theme_clean() +
   
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  # rotate axes: https://stackoverflow.com/questions/1330989/rotating-and-spacing-axis-labels-in-ggplot2
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 mortality_plot_f
 
@@ -271,8 +280,9 @@ ggsave(mortality_plot_f,
 # create a bar chart of male mortality in Manaus, March - June
 mortality_data_m <- readr::read_csv("data/raw_data/Excess_mortality.csv") %>%
   select(-observed_mort_f, -excess_mort_total,
-         -excess_mort_percent, -observed_mort_m, -excess_mort_f, -expected_mort_f) %>%
-  tidyr::pivot_longer(!age, names_to="mortality")
+         -excess_mort_percent, -observed_mort_m,
+         -excess_mort_f, -expected_mort_f) %>%
+  tidyr::pivot_longer(!age, names_to = "mortality")
 
 
 mortality_plot_m <- ggplot(data = mortality_data_m,
@@ -282,7 +292,6 @@ mortality_plot_m <- ggplot(data = mortality_data_m,
   labs(title = "Male mortality in Manaus, March 2020 to June 2020",
        x = "Age",
        y = "Deaths per 1000") +
-  # scale_x_discrete(position = "")
   scale_color_manual("Patient mortality classification",
                      labels = c("Excess mortality male",
                                 "Expected mortality male"),
@@ -290,7 +299,8 @@ mortality_plot_m <- ggplot(data = mortality_data_m,
 
   theme_clean() +
   
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  # rotate axes: https://stackoverflow.com/questions/1330989/rotating-and-spacing-axis-labels-in-ggplot2
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 mortality_plot_m
 
@@ -311,7 +321,7 @@ snps_data <- vcf_with_metadata %>%
   select(pos, ref, alt)
 
 # Combine sets
-ref_alt <- snps_data %>% tidyr::pivot_longer(!pos, names_to="ref_or_alt")
+ref_alt <- snps_data %>% tidyr::pivot_longer(!pos, names_to = "ref_or_alt")
 
 # Plot SNP tally by location, ref, nuc
 snps <- ggplot(data = ref_alt, aes(x = pos, y = value, color = ref_or_alt)) +
