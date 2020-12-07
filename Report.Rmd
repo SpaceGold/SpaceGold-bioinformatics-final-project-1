@@ -1,5 +1,5 @@
 ---
-title: 'Accelerated case rates led to herd immunity but elderly and male mortality in Amazonas, Brazil during the COVID-19 pandemic'
+title: '51% of men and 28% of women aged 65-70 died in Manaus, Brazil by July of the COVID-19 pandemic'
 author: "Adam Zimmerman"
 date: "December 1, 2020"
 output: pdf_document
@@ -26,7 +26,7 @@ What happened in the Amazon and São Paulo during COVID-19?
 
 This exploratory analysis of three epidemiological and one genetic data sets begins by showing that the city of Manaus, and its Northern Brazilian state, Amazonas, were hit harder per capita than the city and state of São Paulo through the second and third quarters (Q2; Q3) of 2020.
 
-From Q2 into Q3, the intense period of infection correlated with the emergence of an antibody prevalence among Manaus blood donors that was approximately threefold greater than antibody prevalence among São Paulo blood donors [Figure 4; @Buss2020.09.16.20194787]. This was an indication of good news and herd immunity for Manaus, heading into Q4. But the path to that antibody prevalence was characterized by a two- to three-fold increase in mortality for Manaus residents, especially those that were male and over 65 [Figure 6; @Prowse2020.09.25.20201939].
+From Q2 into Q3, the intense period of infection correlated with the emergence of an antibody prevalence among Manaus blood donors that was approximately threefold greater than antibody prevalence among São Paulo blood donors [Figure 4; @Buss2020.09.16.20194787]. This was an indication of good news and herd immunity for Manaus, heading into Q4. But the path to that antibody prevalence was characterized by a two- to three-fold increase in mortality for Manaus residents, especially those that were male and over 65 [Figure 6; @Prowse2020.09.25.20201939]. Over half of Manaus men aged 65-70 died.
 
 Genetic data contributed one more distinct, undeniable trend for the Amazon. A variant call analysis of 33 SARS-CoV-2 samples from patients across the Northern Brazilian states surrounding Manaus showed that the great majority of single nucleotide polymorphisms (SNPs) displayed transitions from thymine to cytosine (Figure 8).
 
@@ -62,7 +62,7 @@ Prowse and colleagues reported that Manaus was the most quickly and severely hit
 
 Prowse and colleagues showed that total female mortality (996) was more than double (2.13x) expected mortality (468) in the oldest age group of patients, over 75 [not pictured; @Prowse2020.09.25.20201939]. In fact, the situation was worse for slightly younger female patients, ages 65-70, who faced a total mortality (283) 2.78x expected mortality (102) [Figure 5; @Prowse2020.09.25.20201939].
 
-In contrast, total male mortality (1208) were higher in raw numbers, as well as in proportion (3.16x) to expected mortality (382) in the oldest age group of patients, over 75 [not pictured; @Prowse2020.09.25.20201939]. The ratio of expected (149) to observed mortality (510) was most severe at 3.42x in men, ages 65-70 [Figure 6; @Prowse2020.09.25.20201939]. Men in this age group died at 1.80 times the rate of women of the same age group.
+In contrast, total male mortality (1208) were higher in raw numbers, as well as in proportion (3.16x) to expected mortality (382) in the oldest age group of patients, over 75 [not pictured; @Prowse2020.09.25.20201939]. The ratio of expected (149) to observed mortality (510) was most severe at 3.42x in men, ages 65-70 [Figure 6; @Prowse2020.09.25.20201939]. Men in this age group died at 1.80 times the rate of women of the same age group. In percentage terms, 51.0% of men and 28.3% of women ages 65-70 died by the end of Q2 in Manaus.
 
 In summary, living in Manaus, being over 65, and being male correlated with elevated case rates, antibody prevalence, and mortality for Brazilians facing COVID-19 in Q2 and Q3 of 2020.
 
