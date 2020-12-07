@@ -36,7 +36,7 @@ Genetic data contributed one more distinct, undeniable trend for the Amazon. A v
 
 Throughout 2020, Oxford University hosted and made freely accessible large amount of tabular epidemiological COVID-19 data from across the world [(OxCOVID19)](https://covid19.eng.ox.ac.uk/). This provided the demographics and case rates data of Manaus and São Paulo (Figures 1-3).
 
-Buss and colleagues inferred elevated levels of herd immunity in Manaus from their tabular data, which included antibody prevalence [Figure 4; @Buss2020.09.16.20194787]. Figure 4 collapses multi-week date ranges to a single data point per month; the source data and specific dates can be found in Table 1 of Buss and colleagues' preprint paper [@Buss2020.09.16.20194787].
+Buss and colleagues inferred elevated levels of herd immunity in Manaus from their tabular data, which included antibody prevalence [Figure 4; @Buss2020.09.16.20194787]. Figure 4 collapses multi-week date ranges to a single data point per month. The source data include specific dates, as well as antibody prevalence values before and after adjusting for seroreversion over time. For full details, refer to Table 1 of Buss and colleagues' pre-print paper [@Buss2020.09.16.20194787].
 
 Prowse and colleagues also reported on herd immunity in the Amazon and Northern Brazil, providing risk factor data, including mortality by age and sex [Figures 4-5; @Prowse2020.09.25.20201939].
 
@@ -56,9 +56,9 @@ Prowse and colleagues reported that Manaus was the most quickly and severely hit
 
 Prowse and colleagues showed that total female mortality (996) was more than double (2.13x) expected mortality (468) in the oldest age group of patients, over 75 [not pictured; @Prowse2020.09.25.20201939]. In fact, the situation was worse for slightly younger female patients, ages 65-70, who faced a total mortality (283) 2.78x expected mortality (102) [Figure 5; @Prowse2020.09.25.20201939].
 
-In contrast, total male mortality (1208) were higher in raw numbers, as well as in proportion (3.16x) to expected mortality (382) in the oldest age group of patients, over 75 [not pictured; @Prowse2020.09.25.20201939]. The ratio of expected (149) to observed mortality (510) was most severe at 3.42x in men, ages 65-70 [Figure 6; @Prowse2020.09.25.20201939].
+In contrast, total male mortality (1208) were higher in raw numbers, as well as in proportion (3.16x) to expected mortality (382) in the oldest age group of patients, over 75 [not pictured; @Prowse2020.09.25.20201939]. The ratio of expected (149) to observed mortality (510) was most severe at 3.42x in men, ages 65-70 [Figure 6; @Prowse2020.09.25.20201939]. Men in this age group died at 1.80 times the rate of women of the same age group.
 
-In summary, living in Manaus, being over 65, and being male correlated with elevated case rates per capita, antibody prevalence, and mortality for Brazilians facing COVID-19 in Q2 and Q3 of 2020.
+In summary, living in Manaus, being over 65, and being male correlated with elevated case rates, antibody prevalence, and mortality for Brazilians facing COVID-19 in Q2 and Q3 of 2020.
 
 ## Genetic data analysis
 
@@ -133,7 +133,8 @@ confirmed_plot <- bra_epi_tab %>%
   geom_line(aes(colour=adm_area_1)) +
   labs(title = "Confirmed COVID-19 cases over time",
        x = "Date",
-       y = "Confirmed Cases") +
+       y = "Confirmed Cases",
+       color = "State") +
   theme_clean()
 
 confirmed_plot
@@ -159,7 +160,7 @@ population_data[3,3] <- (population_data[3,3] - population_data[2,3] - populatio
 population_plot <- ggplot(population_data, aes(x="", y=population, fill=RegionName)) +
   geom_bar(stat="identity", width=1, color="white") +
   coord_polar("y", start=0) +
-  labs(title = "Population of Brazil") +
+  labs(title = "Population of Brazil", color = "State") +
   theme_void() # remove background, grid, numeric labels
 
 population_plot
@@ -262,7 +263,7 @@ ggsave(mortality_plot_f,
 
 ```
 
-**Figure 5**: Excess female mortality reached a maximum of 2.13 times the expected mortality in female patients at .
+**Figure 5**: Excess mortality in women peaked at 2.78x times expected mortality in the age group 65-70 years, with a total mortality of 283 deaths per 1000 residents of Manaus.
 \newpage
 
 ```{r mortality-plot-m}
@@ -297,7 +298,7 @@ ggsave(mortality_plot_m,
 
 ```
 
-**Figure 6**: Excess mortality, unexpected deaths of any cause, reached a maximum of 2.49 times the expected mortality in female patients.
+**Figure 6**: Excess mortality in men peaked at 3.42 times expected mortality in the age group 65-70 years, resulting in a total mortality of 510 deaths per 1000 residents of Manaus. Men in this age group died at 1.80 times the rate of death for women of the same age group.
 \newpage
 
 ![](output/figures/quality.png)
