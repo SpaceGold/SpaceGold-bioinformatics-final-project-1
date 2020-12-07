@@ -30,13 +30,13 @@ Additionally, a variant call analysis of 33 SARS-CoV-2 samples showed that the g
 
 # Methods
 
-## Tabular data analysis
+## Tabular data methods
 
 \textcolor{red}{TODO: tabular parsing walkthrough: trace piping especially.}
 
-In the final steps of data processing, I temporarily created a column in `Mortality_data.csv` that compared the ratios of mortality figures. I selected the age range 55-60 to show the maximum ratio seen between male and female excess mortality in Manaus this year.
+In the final steps of data processing, I temporarily created a column in `Mortality_data.csv` that compared the ratios of mortality figures. I selected the age range 55-60 to show the maximum ratio seen between male and female excess mortality in Manaus, March through June, 2020.
 
-## Genetic data analysis
+## Genetic data methods
 
 Illumina NGS runs were collected as 33 .fasta files from the [NCBI SRA website](https://www.ncbi.nlm.nih.gov/sra/). Under the project number PRJNA662684, the runs came grouped by region, being specific to the Brazillian Amazon. 
 
@@ -50,12 +50,13 @@ Lastly, single nucleotide polymorphisms (SNPs) were tallied and grouped by regio
 
 ## Tabular data analysis
 
-This analysis indicates that living in Manaus, being elderly, and being male were risk factors for Brazillians facing COVID-19 in Q2 and Q3 of 2020. It surprised me to see that male patients in Manaus were at such markedly higher risk of death than female patients, to the order of \textcolor{red}{TODO: insert ratio}.
+Cities like Manaus track and report mortality on an ongoing basis, setting a baseline for deaths per week. Excess mortality is the observed number of deaths, minus the baseline expected mortality. Mortality is measured in deaths per 1000 people.
 
-\textcolor{red}{TODO: tabular parsing; refer to figures; 66% of Manaus blood donors versus 22% of São Paulo blood donors. Captions, good axes, citations
-Fix fill for col}.
+Total female mortality (996) was more than double (2.13x) expected mortality (468) in the oldest age group of patients, over 75 [not pictured; @Prowse2020.09.25.20201939]. In the second-most affected female age group, slightly younger at ages 65-70, total mortality (283) was 1.56x expected mortality (102) [Figure 4; @Prowse2020.09.25.20201939].
 
-Excess mortality in 50-55 year old male patients reached a maximum of 126 deaths/1000, 1.30 times their expected mortality of 99 deaths/1000, as well as 2.49 times the excess mortality of female patients of the same age at 54.8 deaths/1000 (Figure 5).
+In contrast, total male mortality (1208) were higher in raw numbers, as well as in proportion (3.16x) to expected mortality (382) in the oldest age group of patients, over 75 [not pictured; @Prowse2020.09.25.20201939]. This ratio was the most severe (3.42x) across both sexes and all age groups in men, ages 65-70, at an expected mortality of 149 versus an observed mortality of 510 [Figure 6; @Prowse2020.09.25.20201939].
+
+In summary, living in Manaus, being over 65, and being male correlated with elevated mortality for Brazilians facing COVID-19 in Q2 and Q3 of 2020.
 
 ## Genetic data analysis
 
@@ -226,7 +227,6 @@ ggsave(plot = prevalence_plot,
 prevalence_plot
 ```
 
-
 **Figure 4**: Manaus saw more widespread prevalence of SARS-CoV-2 antibodies vs. São Paulo, up to 66% vs. 22% of the population respectively.
 \newpage
 
@@ -260,7 +260,7 @@ ggsave(mortality_plot_f,
 
 ```
 
-**Figure 5**: Excess mortality, unexpected deaths of any cause, reached a maximum of 2.49 times the expected mortality in female patients.
+**Figure 5**: Excess female mortality reached a maximum of 2.49 times the expected mortality in female patients.
 \newpage
 
 ```{r mortality-plot-m}
@@ -294,12 +294,12 @@ ggsave(mortality_plot_m,
        filename = "output/figures/mortality_plot_m.png")
 
 ```
-**Figure 6**: Excess mortality, unexpected deaths of any cause, reached a maximum of 2.49 times the expected mortality in female patients.
 
-\textcolor{red}{TODO: unique caption}
+**Figure 6**: Excess mortality, unexpected deaths of any cause, reached a maximum of 2.49 times the expected mortality in female patients.
 \newpage
 
 ![](output/figures/quality.png)
+
 **Figure 7**: A typical fastq sample of SARS-CoV-2 from northern Brazil showed high read quality, with most reads scoring above 26. 
 \newpage
 
