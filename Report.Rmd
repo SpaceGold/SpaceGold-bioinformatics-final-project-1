@@ -272,7 +272,9 @@ mortality_data_m <- readr::read_csv("data/raw_data/Excess_mortality.csv") %>%
   tidyr::pivot_longer(!age, names_to="mortality")
 
 
-mortality_plot_m <- ggplot(data = mortality_data_m, aes(x = age, y = value, color = mortality)) +
+mortality_plot_m <- ggplot(data = mortality_data_m,
+                           aes(x = age, y = value,
+                               color = mortality)) +
   geom_col(aes(color = mortality, fill = mortality)) +
   labs(title = "Male mortality in Manaus, March 2020 to June 2020",
        x = "Age",
@@ -297,19 +299,23 @@ ggsave(mortality_plot_m,
 \textcolor{red}{TODO: unique caption}
 \newpage
 
-# Tables
-
 ```{r genetic-table}
-# Create a table showing what genes had the greatest SNPs, where in Brazil
-vcf_with_metadata %>%
-  group_by(geo_loc_name, qual, gene) %>%
-  tally() %>%
-  select(gene, geo_loc_name, qual) %>%
-  knitr::kable(col.names = c("Gene Name",
-                             "Brazillian State",
-                             "Quality"))
+# Create a facet figure showing the distribution of SNPs
+locations_facet_data <- vcf_with_metadata %>%
+  group_by(pos, ref, alt) %>%
+  tally()
+
+locations_facet <- ggplot(data = locations_facet_data,
+                          aes(x = pos, y = ref)) +
+  geom_point() +
+  facet_grid()
+
+locations_facet
+
+ggsave(locations_facet,
+       filename = "output/figures/locations_facet.png")
 ```
 
-**Table 1**: The greatest numbers of high quality, distinct SNPs in the named genes came from Maranhao and Para, Brazil.
+**Figure 6**: The greatest numbers of high quality, distinct SNPs in the named genes came from Maranhao and Para, Brazil.
 
 # Sources Cited
