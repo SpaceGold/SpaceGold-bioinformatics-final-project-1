@@ -11,7 +11,7 @@ Click through to `Report.pdf` for an exploratory analysis of three epidemiologic
 
 #### Methods
 
-Throughout 2020, Oxford University hosted and made freely accessible large amount of tabular epidemiological COVID-19 data from across the world [(OxCOVID19)](https://covid19.eng.ox.ac.uk/). This provided the demographics and case rates data of Manaus and São Paulo (Figures 1-3).
+Throughout 2020, Oxford University hosted and made freely accessible a large amount of tabular epidemiological COVID-19 data from across the world [(OxCOVID19)](https://covid19.eng.ox.ac.uk/). This provided the demographics and case rates data of Manaus and São Paulo (Figures 1-3).
 
 Prowse and colleagues reported on herd immunity in the Amazon and Northern Brazil, providing risk factor data, including mortality by age and sex (Figures 4-5; [Prowse _et al_., 2020](https://www.medrxiv.org/content/early/2020/10/15/2020.09.25.20201939)).
 
